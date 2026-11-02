@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -9,28 +10,33 @@
 body{margin:0;background:#f3f5f9;color:#172033;font-family:Arial,sans-serif}
 header{background:#123b32;color:white;padding:20px}
 header h2{margin:0 0 5px}
-main{max-width:650px;margin:auto;padding:15px}
-.card{background:white;padding:16px;border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px #0000000a}
+main{max-width:650px;margin:auto;padding:14px}
+.card{background:white;padding:16px;border-radius:14px;margin-bottom:13px;box-shadow:0 2px 8px #0000000a}
 h3{margin:0 0 13px;font-size:17px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{padding:15px;border-radius:12px;background:#eef6f1}
-.stat small{color:#53635a}
-.stat strong{display:block;font-size:21px;margin-top:8px}
-input,select,button{width:100%;padding:12px;border:1px solid #d9dee8;border-radius:9px;font-size:15px;margin:5px 0 10px;background:white}
-button{background:#176b50;color:white;border:0;font-weight:bold}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+button,input,select{width:100%;padding:12px;border:1px solid #d9dee8;border-radius:9px;font-size:15px;margin:5px 0 10px;background:white}
+button{background:#176b50;color:white;border:0;font-weight:bold;cursor:pointer}
 button.secondary{background:#e8edf2;color:#172033}
 button.danger{background:#b83232}
-.row{display:flex;gap:8px}
-.row>*{flex:1;min-width:0}
+.tabs button{font-size:13px;padding:11px 4px}
+.tabs button.active{background:#123b32}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{padding:13px;border-radius:11px;background:#eef6f1}
+.stat small{color:#53635a}
+.stat strong{display:block;font-size:20px;margin-top:7px}
 .item{padding:12px 0;border-bottom:1px solid #eee}
 .item:last-child{border:0}
 .item strong{display:block}
 .muted{color:#718096;font-size:13px}
 .green{color:#16804c}.red{color:#c0392b}
-.hidden{display:none}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
-.tabs button{font-size:13px;padding:11px 4px}
-.tabs button.active{background:#123b32;color:white}
+.hidden{display:none!important}
+.customer{padding:13px;border:1px solid #e6eaf0;border-radius:10px;margin:8px 0;cursor:pointer}
+.customer:active{background:#eef6f1}
+.customer strong{display:block}
+.row{display:flex;gap:8px}
+.row>*{flex:1;min-width:0}
+.back{width:auto;padding:9px 14px}
+.badge{font-size:12px;color:#64748b}
 </style>
 </head>
 <body>
@@ -47,13 +53,14 @@ button.danger{background:#b83232}
 
 <section id="home">
 <div class="card">
-<h3>আজকের হিসাব</h3>
+<h3>দৈনিক হিসাব</h3>
+<label>যে দিনের হিসাব দেখতে চান</label>
 <input type="date" id="homeDate" onchange="render()">
 <div class="stats">
 <div class="stat"><small>মোট আয়</small><strong class="green" id="todayIncome">৳০</strong></div>
 <div class="stat"><small>মোট ব্যয়</small><strong class="red" id="todayExpense">৳০</strong></div>
-<div class="stat"><small>আজকের লাভ/ক্ষতি</small><strong id="todayBalance">৳০</strong></div>
-<div class="stat"><small>মোট লেনদেন</small><strong id="todayCount">০</strong></div>
+<div class="stat"><small>লাভ / ক্ষতি</small><strong id="todayBalance">৳০</strong></div>
+<div class="stat"><small>লেনদেন সংখ্যা</small><strong id="todayCount">০</strong></div>
 </div>
 </div>
 <div class="card">
@@ -64,76 +71,112 @@ button.danger{background:#b83232}
 
 <section id="daily" class="hidden">
 <div class="card">
-<h3>নতুন আয় / ব্যয় যোগ করুন</h3>
+<h3>নতুন আয় / ব্যয়</h3>
 <label>লেনদেনের ধরন</label>
-<select id="kind"><option value="income">আয়</option><option value="expense">ব্যয়</option></select>
+<select id="kind">
+<option value="income">আয়</option>
+<option value="expense">ব্যয়</option>
+</select>
 <label>তারিখ</label>
 <input type="date" id="txDate">
 <label>টাকার পরিমাণ</label>
-<input type="number" id="txAmount" placeholder="টাকার পরিমাণ">
+<input type="number" id="txAmount" min="1" placeholder="টাকার পরিমাণ">
 <label>বিবরণ</label>
 <input id="txNote" placeholder="যেমন: বিক্রির টাকা, দোকান ভাড়া">
 <button onclick="addTx()">লেনদেন সংরক্ষণ করুন</button>
 </div>
 <div class="card">
-<h3>সকল আয়-ব্যয়ের তালিকা</h3>
+<h3>সকল আয়-ব্যয়</h3>
 <div id="allTx"></div>
 </div>
 </section>
 
 <section id="customers" class="hidden">
+<div id="customerListPage">
+<div class="card">
+<h3>বাকির খাতার সারসংক্ষেপ</h3>
+<div class="stats">
+<div class="stat"><small>মোট পাওনা</small><strong id="allDue">৳০</strong></div>
+<div class="stat"><small>কাস্টমার সংখ্যা</small><strong id="customerCount">০</strong></div>
+</div>
+</div>
 <div class="card">
 <h3>নতুন কাস্টমার যোগ করুন</h3>
 <input id="newCustomer" placeholder="কাস্টমারের নাম">
 <button onclick="addCustomer()">কাস্টমার যোগ করুন</button>
 </div>
 <div class="card">
-<h3>কাস্টমারের লেনদেন</h3>
-<select id="customerSelect" onchange="renderCustomer()"></select>
-<label>লেনদেনের ধরন</label>
-<select id="customerKind">
-<option value="due">বাকি দেওয়া (পাওনা বাড়বে)</option>
-<option value="payment">বাকি জমা (পাওনা কমবে)</option>
-<option value="deposit">জমা গ্রহণ (জমা বাড়বে)</option>
-<option value="withdraw">জমা ফেরত (জমা কমবে)</option>
-</select>
-<label>তারিখ</label>
-<input type="date" id="customerDate">
-<label>টাকার পরিমাণ</label>
-<input type="number" id="customerAmount" placeholder="টাকার পরিমাণ">
-<label>বিবরণ</label>
-<input id="customerNote" placeholder="বিস্তারিত">
-<button onclick="addCustomerTx()">লেনদেন সংরক্ষণ করুন</button>
+<h3>কাস্টমারের তালিকা</h3>
+<input id="customerSearch" placeholder="নাম দিয়ে খুঁজুন..." oninput="renderCustomers()">
+<div id="customerList"></div>
 </div>
+</div>
+
+<div id="customerDetailPage" class="hidden">
 <div class="card">
-<h3>কাস্টমারের বর্তমান হিসাব</h3>
+<button class="secondary back" onclick="backToCustomers()">← কাস্টমার তালিকা</button>
+<h3 id="detailName">কাস্টমার</h3>
 <div class="stats">
 <div class="stat"><small>বর্তমান বাকি / পাওনা</small><strong id="dueTotal">৳০</strong></div>
 <div class="stat"><small>বর্তমান জমা</small><strong id="depositTotal">৳০</strong></div>
 </div>
-<h3 style="margin-top:18px">লেনদেনের ইতিহাস</h3>
+</div>
+<div class="card">
+<h3>নতুন লেনদেন</h3>
+<label>লেনদেনের ধরন</label>
+<select id="customerKind">
+<option value="due">বাকি দিলাম (+)</option>
+<option value="payment">বাকি জমা পেলাম (-)</option>
+<option value="deposit">জমা গ্রহণ (+)</option>
+<option value="withdraw">জমা ফেরত (-)</option>
+</select>
+<label>তারিখ</label>
+<input type="date" id="customerDate">
+<label>টাকার পরিমাণ</label>
+<input type="number" id="customerAmount" min="1" placeholder="টাকার পরিমাণ">
+<label>বিবরণ</label>
+<input id="customerNote" placeholder="বিস্তারিত (ঐচ্ছিক)">
+<button onclick="addCustomerTx()">লেনদেন সংরক্ষণ করুন</button>
+</div>
+<div class="card">
+<h3>লেনদেনের ইতিহাস</h3>
 <div id="customerHistory"></div>
+</div>
 </div>
 </section>
 
 <div class="card">
 <h3>ডেটা ব্যাকআপ</h3>
 <button class="secondary" onclick="backup()">হিসাব ডাউনলোড করুন</button>
+<label>ব্যাকআপ থেকে হিসাব ফেরত আনুন</label>
 <input type="file" id="restoreFile" accept=".json" onchange="restore(event)">
-<div class="muted">ব্যাকআপ ফাইল নিরাপদে রাখবেন। ফোন পরিবর্তন করলে এটি দিয়ে হিসাব ফেরত আনা যাবে।</div>
+<div class="muted">নিয়মিত ব্যাকআপ রাখবেন। ফোন পরিবর্তন হলে এই ফাইল দিয়ে হিসাব ফেরত আনা যাবে।</div>
 </div>
 </main>
 
 <script>
 const $=id=>document.getElementById(id);
-const today=()=>new Date().toISOString().slice(0,10);
-let data=JSON.parse(localStorage.getItem('dailyHisabV1')||'{"tx":[],"customers":[],"ctx":[]}');
+function today(){
+ const d=new Date();
+ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+let data;
+try{
+ data=JSON.parse(localStorage.getItem('dailyHisabV1')||'{"tx":[],"customers":[],"ctx":[]}');
+ if(!Array.isArray(data.tx)||!Array.isArray(data.customers)||!Array.isArray(data.ctx))throw 0;
+}catch(e){
+ data={tx:[],customers:[],ctx:[]};
+}
+let selectedCustomer=null;
 
+function money(n){return '৳'+Number(n||0).toLocaleString('en-IN')}
+function safe(s){
+ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function save(){
  localStorage.setItem('dailyHisabV1',JSON.stringify(data));
  render();
 }
-function money(n){return '৳'+Number(n||0).toLocaleString('en-IN')}
 function showTab(id,btn){
  ['home','daily','customers'].forEach(x=>$(x).classList.add('hidden'));
  $(id).classList.remove('hidden');
@@ -143,132 +186,145 @@ function showTab(id,btn){
 }
 function addTx(){
  let amount=Number($('txAmount').value);
+ let date=$('txDate').value;
  if(!amount||amount<=0)return alert('সঠিক টাকার পরিমাণ লিখুন');
- data.tx.unshift({id:Date.now(),kind:$('kind').value,date:$('txDate').value,amount,note:$('txNote').value});
+ if(!date)return alert('তারিখ নির্বাচন করুন');
+ data.tx.unshift({id:Date.now(),kind:$('kind').value,date,amount,note:$('txNote').value});
  $('txAmount').value='';$('txNote').value='';
  save();alert('লেনদেন সংরক্ষণ হয়েছে');
 }
 function addCustomer(){
  let name=$('newCustomer').value.trim();
  if(!name)return alert('কাস্টমারের নাম লিখুন');
- if(data.customers.some(c=>c.name.toLowerCase()===name.toLowerCase()))return alert('এই নাম আগে থেকেই আছে');
+ if(data.customers.some(c=>c.name.trim().toLowerCase()===name.toLowerCase()))
+ return alert('এই কাস্টমার আগে থেকেই আছে');
  data.customers.push({id:Date.now(),name});
- $('newCustomer').value='';save();
-}
-function addCustomerTx(){
- let cid=Number($('customerSelect').value),amount=Number($('customerAmount').value);
- if(!cid)return alert('কাস্টমার নির্বাচন করুন');
- if(!amount||amount<=0)return alert('সঠিক টাকার পরিমাণ লিখুন');
- let kind=$('customerKind').value;
- let balances=getBalances(cid);
- if(kind==='payment'&&amount>balances.due)return alert('বর্তমান বাকি থেকে বেশি জমা দেওয়া যাবে না');
- if(kind==='withdraw'&&amount>balances.deposit)return alert('বর্তমান জমা থেকে বেশি ফেরত দেওয়া যাবে না');
- data.ctx.unshift({id:Date.now(),cid,kind,date:$('customerDate').value,amount,note:$('customerNote').value});
- $('customerAmount').value='';$('customerNote').value='';
- save();alert('কাস্টমারের হিসাব সংরক্ষণ হয়েছে');
+ $('newCustomer').value='';
+ save();alert('কাস্টমার যোগ হয়েছে');
 }
 function getBalances(cid){
  let due=0,deposit=0;
- data.ctx.filter(x=>x.cid===cid).forEach(x=>{
- if(x.kind==='due')due+=x.amount;
- if(x.kind==='payment')due-=x.amount;
- if(x.kind==='deposit')deposit+=x.amount;
- if(x.kind==='withdraw')deposit-=x.amount;
+ data.ctx.filter(x=>Number(x.cid)===Number(cid)).forEach(x=>{
+ let amount=Number(x.amount)||0;
+ if(x.kind==='due')due+=amount;
+ if(x.kind==='payment')due-=amount;
+ if(x.kind==='deposit')deposit+=amount;
+ if(x.kind==='withdraw')deposit-=amount;
  });
  return {due,deposit};
 }
-function delTx(id,type){
- if(!confirm('এই লেনদেনটি মুছে ফেলবেন?'))return;
- if(type==='daily')data.tx=data.tx.filter(x=>x.id!==id);
- else data.ctx=data.ctx.filter(x=>x.id!==id);
- save();
+function addCustomerTx(){
+ let cid=selectedCustomer,amount=Number($('customerAmount').value);
+ let date=$('customerDate').value;
+ if(!cid)return alert('কাস্টমার নির্বাচন করুন');
+ if(!amount||amount<=0)return alert('সঠিক টাকার পরিমাণ লিখুন');
+ if(!date)return alert('তারিখ নির্বাচন করুন');
+ let kind=$('customerKind').value;
+ let b=getBalances(cid);
+ if(kind==='payment'&&amount>b.due)return alert('বর্তমান বাকি থেকে বেশি জমা দেওয়া যাবে না');
+ if(kind==='withdraw'&&amount>b.deposit)return alert('বর্তমান জমা থেকে বেশি ফেরত দেওয়া যাবে না');
+ data.ctx.unshift({id:Date.now(),cid,kind,date,amount,note:$('customerNote').value});
+ $('customerAmount').value='';$('customerNote').value='';
+ save();alert('কাস্টমারের হিসাব সংরক্ষণ হয়েছে');
+}
+function openCustomer(cid){
+ selectedCustomer=Number(cid);
+ $('customerListPage').classList.add('hidden');
+ $('customerDetailPage').classList.remove('hidden');
+ renderCustomer();
+}
+function backToCustomers(){
+ selectedCustomer=null;
+ $('customerDetailPage').classList.add('hidden');
+ $('customerListPage').classList.remove('hidden');
+ renderCustomers();
+}
+function renderCustomers(){
+ let search=($('customerSearch').value||'').trim().toLowerCase();
+ let total=0;
+ data.customers.forEach(c=>total+=getBalances(c.id).due);
+ $('allDue').textContent=money(total);
+ $('customerCount').textContent=data.customers.length;
+ let list=data.customers.filter(c=>c.name.toLowerCase().includes(search));
+ $('customerList').innerHTML=list.map(c=>{
+ let b=getBalances(c.id);
+ return `<div class="customer" onclick="openCustomer(${Number(c.id)})">
+ <strong>${safe(c.name)}</strong>
+ <span class="muted">বর্তমান বাকি: <b class="${b.due>0?'red':'green'}">${money(b.due)}</b></span>
+ </div>`;
+ }).join('')||'<div class="muted">কোনো কাস্টমার পাওয়া যায়নি</div>';
 }
 function renderCustomer(){
- let cid=Number($('customerSelect').value);
- if(!cid){$('dueTotal').textContent=money(0);$('depositTotal').textContent=money(0);$('customerHistory').innerHTML='কাস্টমার নির্বাচন করুন';return}
- let b=getBalances(cid);
+ let c=data.customers.find(x=>Number(x.id)===selectedCustomer);
+ if(!c){backToCustomers();return}
+ $('detailName').textContent=c.name;
+ let b=getBalances(c.id);
  $('dueTotal').textContent=money(b.due);
  $('depositTotal').textContent=money(b.deposit);
  let names={due:'বাকি দেওয়া',payment:'বাকি জমা',deposit:'জমা গ্রহণ',withdraw:'জমা ফেরত'};
- $('customerHistory').innerHTML=data.ctx.filter(x=>x.cid===cid).map(x=>`<div class="item"><strong>${names[x.kind]} — ${money(x.amount)}</strong><span class="muted">${x.date} · ${safe(x.note)}</span><button class="danger" onclick="delTx(${x.id},'customer')">মুছুন</button></div>`).join('')||'কোনো লেনদেন নেই';
+ $('customerHistory').innerHTML=data.ctx.filter(x=>Number(x.cid)===Number(c.id)).map(x=>
+ `<div class="item">
+ <strong>${names[x.kind]||'লেনদেন'} — ${money(x.amount)}</strong>
+ <span class="muted">${safe(x.date)} · ${safe(x.note)}</span>
+ <button class="danger" onclick="delTx(${Number(x.id)},'customer')">মুছুন</button>
+ </div>`).join('')||'<div class="muted">কোনো লেনদেন নেই</div>';
 }
-function safe(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function delTx(id,type){
+ if(!confirm('এই লেনদেনটি মুছে ফেলবেন?'))return;
+ if(type==='daily')data.tx=data.tx.filter(x=>Number(x.id)!==Number(id));
+ else data.ctx=data.ctx.filter(x=>Number(x.id)!==Number(id));
+ save();
+}
 function render(){
  let date=$('homeDate').value||today();
  let list=data.tx.filter(x=>x.date===date);
- let inc=list.filter(x=>x.kind==='income').reduce((a,x)=>a+x.amount,0);
- let exp=list.filter(x=>x.kind==='expense').reduce((a,x)=>a+x.amount,0);
+ let inc=list.filter(x=>x.kind==='income').reduce((a,x)=>a+Number(x.amount),0);
+ let exp=list.filter(x=>x.kind==='expense').reduce((a,x)=>a+Number(x.amount),0);
  $('todayIncome').textContent=money(inc);
  $('todayExpense').textContent=money(exp);
  $('todayBalance').textContent=money(inc-exp);
+ $('todayBalance').className=inc-exp>=0?'green':'red';
  $('todayCount').textContent=list.length;
- $('recent').innerHTML=list.slice().reverse().map(x=>`<div class="item"><strong>${x.kind==='income'?'আয়':'ব্যয়'} — ${money(x.amount)}</strong><span class="muted">${safe(x.note)}</span></div>`).join('')||'আজ কোনো লেনদেন নেই';
- $('allTx').innerHTML=data.tx.map(x=>`<div class="item"><strong>${x.kind==='income'?'আয়':'ব্যয়'} — ${money(x.amount)}</strong><span class="muted">${x.date} · ${safe(x.note)}</span><button class="danger" onclick="delTx(${x.id},'daily')">মুছুন</button></div>`).join('')||'কোনো লেনদেন নেই';
- let old=$('customerSelect').value;
- $('customerSelect').innerHTML='<option value="">কাস্টমার নির্বাচন করুন</option>'+data.customers.map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join('');
- if(data.customers.some(c=>String(c.id)===old))$('customerSelect').value=old;
- renderCustomer();
+ $('recent').innerHTML=list.map(x=>
+ `<div class="item"><strong>${x.kind==='income'?'আয়':'ব্যয়'} — ${money(x.amount)}</strong><span class="muted">${safe(x.note)}</span></div>`
+ ).join('')||'এই দিনের কোনো লেনদেন নেই';
+ $('allTx').innerHTML=data.tx.map(x=>
+ `<div class="item"><strong>${x.kind==='income'?'আয়':'ব্যয়'} — ${money(x.amount)}</strong>
+ <span class="muted">${safe(x.date)} · ${safe(x.note)}</span>
+ <button class="danger" onclick="delTx(${Number(x.id)},'daily')">মুছুন</button></div>`
+ ).join('')||'কোনো লেনদেন নেই';
+ renderCustomers();
+ if(selectedCustomer)renderCustomer();
 }
 function backup(){
  let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daily-hisab-backup.json';a.click();URL.revokeObjectURL(a.href);
+ let a=document.createElement('a');
+ let url=URL.createObjectURL(blob);
+ a.href=url;a.download='daily-hisab-backup.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function restore(e){
  let f=e.target.files[0];if(!f)return;
  let r=new FileReader();
- r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.tx)||!Array.isArray(d.customers)||!Array.isArray(d.ctx))throw 0;if(confirm('বর্তমান হিসাবের বদলে ব্যাকআপের হিসাব বসাবেন?')){data=d;save();alert('ব্যাকআপ ফেরত আনা হয়েছে')}}catch{alert('ভুল বা অসম্পূর্ণ ব্যাকআপ ফাইল')}};
+ r.onload=()=>{
+ try{
+ let d=JSON.parse(r.result);
+ if(!Array.isArray(d.tx)||!Array.isArray(d.customers)||!Array.isArray(d.ctx))throw 0;
+ if(confirm('বর্তমান হিসাবের বদলে ব্যাকআপের হিসাব বসাবেন?')){
+ data=d;selectedCustomer=null;
+ $('customerDetailPage').classList.add('hidden');
+ $('customerListPage').classList.remove('hidden');
+ save();alert('ব্যাকআপ ফেরত আনা হয়েছে');
+ }
+ }catch(err){alert('ভুল বা অসম্পূর্ণ ব্যাকআপ ফাইল')}
+ $('restoreFile').value='';
+ };
  r.readAsText(f);
 }
 $('homeDate').value=today();
 $('txDate').value=today();
 $('customerDate').value=today();
 render();
-(function(){
- const flag='oldBalances20261102Added';
- if(localStorage.getItem(flag)==='yes') return;
-
- const list=[
- ['নিরব ভাইয়া',9600],['রব্বানি CID',5040],
- ['জাহাঙ্গীর চাচা',5000],['জামিল ভাই',3615],
- ['রাশেদ ভাইয়া',3200],['ফরহাদ মামা',2000],
- ['খাদেমুল',1500],['রিপন ভাই',1500],
- ['সোহেল ভাই',1000],['রাকিব',610],
- ['নিজাম',480],['লিমন আংকেল',400],
- ['সিহাব শুভ',260],['রোকন স্যার',200],
- ['অমূল্য বর্মণ',50],['জাহিদ',10]
- ];
-
- list.forEach(([name,amount],i)=>{
-  let c=data.customers.find(x=>x.name.trim()===name);
-  if(!c){
-   c={id:Date.now()+i+1,name};
-   data.customers.push(c);
-  }
-  data.ctx.push({
-   id:Date.now()+100+i,
-   cid:c.id,
-   kind:'due',
-   date:'2026-11-02',
-   amount,
-   note:'পুরোনো বাকি'
-  });
-
-  if(name==='অমূল্য বর্মণ'){
-   data.ctx.push({
-    id:Date.now()+200+i,
-    cid:c.id,
-    kind:'deposit',
-    date:'2026-11-02',
-    amount:1500,
-    note:'আগের ডিপোজিট — আলাদা হিসাব'
-   });
-  }
- });
-
- localStorage.setItem('dailyHisabV1',JSON.stringify(data));
- localStorage.setItem(flag,'yes');
- render();
-})();
 </script>
 </body>
 </html>
