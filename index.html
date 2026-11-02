@@ -223,6 +223,52 @@ $('homeDate').value=today();
 $('txDate').value=today();
 $('customerDate').value=today();
 render();
+(function(){
+ const flag='oldBalances20261102Added';
+ if(localStorage.getItem(flag)==='yes') return;
+
+ const list=[
+ ['নিরব ভাইয়া',9600],['রব্বানি CID',5040],
+ ['জাহাঙ্গীর চাচা',5000],['জামিল ভাই',3615],
+ ['রাশেদ ভাইয়া',3200],['ফরহাদ মামা',2000],
+ ['খাদেমুল',1500],['রিপন ভাই',1500],
+ ['সোহেল ভাই',1000],['রাকিব',610],
+ ['নিজাম',480],['লিমন আংকেল',400],
+ ['সিহাব শুভ',260],['রোকন স্যার',200],
+ ['অমূল্য বর্মণ',50],['জাহিদ',10]
+ ];
+
+ list.forEach(([name,amount],i)=>{
+  let c=data.customers.find(x=>x.name.trim()===name);
+  if(!c){
+   c={id:Date.now()+i+1,name};
+   data.customers.push(c);
+  }
+  data.ctx.push({
+   id:Date.now()+100+i,
+   cid:c.id,
+   kind:'due',
+   date:'2026-11-02',
+   amount,
+   note:'পুরোনো বাকি'
+  });
+
+  if(name==='অমূল্য বর্মণ'){
+   data.ctx.push({
+    id:Date.now()+200+i,
+    cid:c.id,
+    kind:'deposit',
+    date:'2026-11-02',
+    amount:1500,
+    note:'আগের ডিপোজিট — আলাদা হিসাব'
+   });
+  }
+ });
+
+ localStorage.setItem('dailyHisabV1',JSON.stringify(data));
+ localStorage.setItem(flag,'yes');
+ render();
+})();
 </script>
 </body>
 </html>
