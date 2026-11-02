@@ -1,109 +1,429 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#172554">
 <title>দোকান হিসাব</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
-:root{--navy:#172554;--blue:#2563eb;--purple:#7c3aed;--green:#059669;--red:#dc2626;--orange:#ea580c;--bg:#f3f6fc;--text:#172033;--muted:#64748b;--line:#e7ebf3;--shadow:0 7px 22px #1e325a0c}
+
+:root{
+ --navy:#172554;
+ --blue:#2563eb;
+ --purple:#7c3aed;
+ --green:#059669;
+ --red:#dc2626;
+ --bg:#f3f6fc;
+ --text:#172033;
+ --muted:#64748b;
+ --line:#e7ebf3;
+ --shadow:0 7px 22px #1e325a0c;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
-.app{max-width:760px;margin:auto;min-height:100vh}
-header{background:linear-gradient(120deg,#172554,#2563eb);color:white;padding:20px 17px 25px;border-radius:0 0 24px 24px}
-.top{display:flex;justify-content:space-between;align-items:center}
-.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:11px;font-weight:400;opacity:.8}
+
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:'Hind Siliguri',sans-serif;
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+
+.app{
+ max-width:760px;
+ margin:auto;
+ min-height:100vh;
+}
+
+header{
+ background:linear-gradient(120deg,#172554,#2563eb);
+ color:white;
+ padding:20px 17px 25px;
+ border-radius:0 0 24px 24px;
+}
+
+.top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.brand{font-size:21px;font-weight:700}
+.brand small{display:block;font-size:11px;font-weight:400;opacity:.8}
 #today{font-size:12px;opacity:.85}
-.tabs{display:flex;gap:9px;margin-top:19px}
-.tab{flex:1;padding:12px;border-radius:12px;background:#ffffff25;color:white;font-weight:600}
-.tab.active{background:white;color:var(--navy)}
+
+.tabs{
+ display:flex;
+ gap:9px;
+ margin-top:19px;
+}
+
+.tab{
+ flex:1;
+ padding:12px 6px;
+ border-radius:12px;
+ background:#ffffff25;
+ color:white;
+ font-weight:600;
+}
+
+.tab.active{
+ background:white;
+ color:var(--navy);
+}
+
 main{padding:16px}
-.page{display:none}.page.active{display:block}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
-.stat{background:white;border-radius:16px;padding:14px;box-shadow:var(--shadow)}
-.stat small{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:22px;margin-top:4px}
-.blueText{color:var(--blue)}.greenText{color:var(--green)}.redText{color:var(--red)}.purpleText{color:var(--purple)}
-.btn{padding:12px 14px;border-radius:11px;font-weight:600}
-.primary{width:100%;background:linear-gradient(110deg,#2563eb,#4f46e5);color:white;box-shadow:0 5px 14px #2563eb20}
-.green{background:linear-gradient(110deg,#059669,#10b981);color:white}
-.purple{background:linear-gradient(110deg,#7c3aed,#9333ea);color:white}
+
+.page{display:none}
+.page.active{display:block}
+
+.stats{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ margin-bottom:15px;
+}
+
+.stat{
+ background:white;
+ border-radius:16px;
+ padding:14px;
+ box-shadow:var(--shadow);
+}
+
+.stat small{color:var(--muted);font-size:12px}
+.stat strong{display:block;font-size:21px;margin-top:4px}
+
+.blueText{color:var(--blue)}
+.greenText{color:var(--green)}
+.redText{color:var(--red)}
+.purpleText{color:var(--purple)}
+
+.btn{
+ padding:12px 14px;
+ border-radius:11px;
+ font-weight:600;
+}
+
+.primary{
+ width:100%;
+ background:linear-gradient(110deg,#2563eb,#4f46e5);
+ color:white;
+}
+
+.green{
+ background:linear-gradient(110deg,#059669,#10b981);
+ color:white;
+}
+
+.purple{
+ background:linear-gradient(110deg,#7c3aed,#9333ea);
+ color:white;
+}
+
 .soft{background:#eef2ff;color:#3730a3}
 .gray{background:#edf1f7;color:#334155}
 .red{background:#fee2e2;color:#b91c1c}
-.section{display:flex;justify-content:space-between;align-items:center;margin:21px 0 10px}
+
+.section{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin:21px 0 10px;
+}
+
 .section h3{margin:0;font-size:17px}
-.search,.sort{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:white;outline:none}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
-.item{display:flex;align-items:center;gap:11px;background:white;padding:13px;border-radius:14px;margin:9px 0;box-shadow:var(--shadow)}
-.avatar{width:42px;height:42px;border-radius:13px;background:#e8efff;color:#2455c7;display:grid;place-items:center;font-weight:700;flex-shrink:0}
-.info{flex:1;min-width:0}.info b{display:block;font-size:15px;overflow-wrap:anywhere}
+
+.search,.sort{
+ width:100%;
+ padding:12px;
+ border:1px solid var(--line);
+ border-radius:11px;
+ background:white;
+ outline:none;
+}
+
+.controls{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+ margin:10px 0;
+}
+
+.item{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ background:white;
+ padding:13px;
+ border-radius:14px;
+ margin:9px 0;
+ box-shadow:var(--shadow);
+}
+
+.avatar{
+ width:42px;
+ height:42px;
+ border-radius:13px;
+ background:#e8efff;
+ color:#2455c7;
+ display:grid;
+ place-items:center;
+ font-weight:700;
+ flex-shrink:0;
+}
+
+.info{flex:1;min-width:0}
+.info b{display:block;font-size:15px;overflow-wrap:anywhere}
 .info small{font-size:12px;color:var(--muted)}
-.amount{font-weight:700;color:var(--red);white-space:nowrap}
+
+.amount{
+ font-weight:700;
+ color:var(--red);
+ white-space:nowrap;
+}
+
 .amount.ok{color:var(--green)}
 .arrow{color:#94a3b8;font-size:22px}
-.panel{background:white;padding:16px;border-radius:17px;box-shadow:var(--shadow);margin-bottom:13px}
-.back{background:#e8edfa;color:#263d76;padding:9px 13px;border-radius:9px;font-weight:600;margin-bottom:13px}
+
+.panel{
+ background:white;
+ padding:16px;
+ border-radius:17px;
+ box-shadow:var(--shadow);
+ margin-bottom:13px;
+}
+
+.back{
+ background:#e8edfa;
+ color:#263d76;
+ padding:9px 13px;
+ border-radius:9px;
+ font-weight:600;
+ margin-bottom:13px;
+}
+
 h2{font-size:21px;margin:0 0 4px}
 .muted{font-size:12px;color:var(--muted)}
+
 .field{margin:13px 0}
-.field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
-.field input,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fbfcff;outline:none}
+
+.field label{
+ display:block;
+ font-size:13px;
+ font-weight:600;
+ margin-bottom:5px;
+}
+
+.field input,.field textarea{
+ width:100%;
+ padding:12px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:#fbfcff;
+ outline:none;
+}
+
 .field textarea{min-height:85px;resize:vertical}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.actions{display:flex;gap:8px;margin-top:13px}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+}
+
+.actions{
+ display:flex;
+ gap:8px;
+ margin-top:13px;
+}
+
 .actions>*{flex:1}
-.notice{background:#eff6ff;color:#1e40af;border-radius:11px;padding:11px;font-size:12px;margin:12px 0}
-.badge{font-size:10px;padding:4px 8px;border-radius:20px;background:#fee2e2;color:#b91c1c}
+
+.notice{
+ background:#eff6ff;
+ color:#1e40af;
+ border-radius:11px;
+ padding:11px;
+ font-size:12px;
+ margin:12px 0;
+}
+
+.badge{
+ font-size:10px;
+ padding:4px 8px;
+ border-radius:20px;
+ background:#fee2e2;
+ color:#b91c1c;
+}
+
 .badge.ok{background:#dcfce7;color:#166534}
-.transaction{padding:12px 0;border-bottom:1px solid var(--line)}
+
+.transaction{
+ padding:12px 0;
+ border-bottom:1px solid var(--line);
+}
+
 .transaction:last-child{border:0}
-.txrow{display:flex;justify-content:space-between;gap:8px}
+
+.txrow{
+ display:flex;
+ justify-content:space-between;
+ gap:8px;
+}
+
 .txmeta{font-size:11px;color:var(--muted);margin-top:3px}
 .txnote{font-size:12px;color:#475569;margin-top:4px}
-.txbuttons{display:flex;gap:7px;margin-top:7px}
-.txbuttons button{background:#eef2ff;color:#3730a3;border-radius:7px;padding:6px 9px;font-size:11px}
-.empty{text-align:center;padding:25px 10px;color:var(--muted)}
-.empty b{display:block;color:#475569;font-size:16px}
-.overlay{position:fixed;inset:0;background:#101a32aa;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}
+
+.txbuttons{
+ display:flex;
+ gap:7px;
+ margin-top:7px;
+}
+
+.txbuttons button{
+ background:#eef2ff;
+ color:#3730a3;
+ border-radius:7px;
+ padding:6px 9px;
+ font-size:11px;
+}
+
+.empty{
+ text-align:center;
+ padding:25px 10px;
+ color:var(--muted);
+}
+
+.empty b{
+ display:block;
+ color:#475569;
+ font-size:16px;
+}
+
+.overlay{
+ position:fixed;
+ inset:0;
+ background:#101a32aa;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+ z-index:20;
+}
+
 .overlay.show{display:flex}
-.dialog{background:white;border-radius:18px;padding:20px;width:100%;max-width:430px;max-height:90vh;overflow:auto}
-.dialog h3{margin:0 0 5px}.dialog p{font-size:12px;color:var(--muted);margin:0 0 13px}
-.dialogActions{display:flex;gap:8px;margin-top:13px}.dialogActions>*{flex:1}
-.footer{text-align:center;color:#94a3b8;font-size:11px;padding:20px}
+
+.dialog{
+ background:white;
+ border-radius:18px;
+ padding:20px;
+ width:100%;
+ max-width:430px;
+ max-height:90vh;
+ overflow:auto;
+}
+
+.dialog h3{margin:0 0 5px}
+.dialog p{font-size:12px;color:var(--muted);margin:0 0 13px}
+
+.dialogActions{
+ display:flex;
+ gap:8px;
+ margin-top:13px;
+}
+
+.dialogActions>*{flex:1}
+
+.footer{
+ text-align:center;
+ color:#94a3b8;
+ font-size:11px;
+ padding:20px;
+}
+
 .hidden{display:none!important}
-@media(max-width:420px){main{padding:12px}.stat strong{font-size:19px}.grid{gap:7px}}
+
+@media(max-width:420px){
+ main{padding:12px}
+ .stat strong{font-size:18px}
+ .grid{gap:7px}
+ .btn{padding:11px 9px;font-size:13px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
  <div class="top">
-  <div class="brand">📒 দোকান হিসাব<small>Smart Business Ledger</small></div>
+  <div class="brand">
+   📒 দোকান হিসাব
+   <small>Smart Business Ledger</small>
+  </div>
   <div id="today"></div>
  </div>
+
  <div class="tabs">
-  <button class="tab active" id="tabCustomers" onclick="switchTab('customers')">👥 বাকির খাতা</button>
-  <button class="tab" id="tabStock" onclick="switchTab('stock')">📦 মালের স্টক</button>
+  <button class="tab active" id="tabCustomers" onclick="switchTab('customers')">
+   👥 বাকির খাতা
+  </button>
+
+  <button class="tab" id="tabStock" onclick="switchTab('stock')">
+   📦 মালের স্টক
+  </button>
  </div>
 </header>
 
 <main>
+
 <!-- CUSTOMER HOME -->
 <section id="customerHome" class="page active">
+
  <div class="stats">
-  <div class="stat"><small>মোট কাস্টমার</small><strong class="blueText" id="totalCustomers">০</strong></div>
-  <div class="stat"><small>মোট বাকি পাওনা</small><strong class="redText" id="totalDue">৳০</strong></div>
+  <div class="stat">
+   <small>মোট কাস্টমার</small>
+   <strong class="blueText" id="totalCustomers">০</strong>
+  </div>
+
+  <div class="stat">
+   <small>মোট বাকি পাওনা</small>
+   <strong class="redText" id="totalDue">৳০</strong>
+  </div>
  </div>
- <button class="btn primary" onclick="openCustomerForm()">＋ নতুন কাস্টমার যোগ</button>
+
+ <button class="btn primary" onclick="openCustomerForm()">
+  ＋ নতুন কাস্টমার যোগ
+ </button>
+
  <div class="actions">
-  <button class="btn green" onclick="shareCustomerList()">WhatsApp-এ পুরো লিস্ট পাঠান</button>
-  <button class="btn soft" onclick="copyCustomerList()">লিস্ট কপি</button>
+  <button class="btn green" onclick="shareCustomerList()">
+   WhatsApp-এ লিস্ট পাঠান
+  </button>
+
+  <button class="btn soft" onclick="copyCustomerList()">
+   লিস্ট কপি
+  </button>
  </div>
- <div class="section"><h3>কাস্টমার লিস্ট</h3><span class="muted" id="customerCount"></span></div>
- <input class="search" id="customerSearch" placeholder="🔍 নাম বা মোবাইল দিয়ে খুঁজুন" oninput="renderCustomers()">
+
+ <div class="section">
+  <h3>কাস্টমার লিস্ট</h3>
+  <span class="muted" id="customerCount"></span>
+ </div>
+
+ <input
+  class="search"
+  id="customerSearch"
+  placeholder="🔍 নাম বা মোবাইল দিয়ে খুঁজুন"
+  oninput="renderCustomers()"
+ >
+
  <div class="controls">
   <select class="sort" id="customerSort" onchange="renderCustomers()">
    <option value="high">বাকি বেশি → কম</option>
@@ -112,70 +432,194 @@ h2{font-size:21px;margin:0 0 4px}
    <option value="name">নাম অনুযায়ী</option>
    <option value="recent">সর্বশেষ যোগ করা</option>
   </select>
-  <button class="btn soft" onclick="resetCustomerFilters()">ফিল্টার রিসেট</button>
+
+  <button class="btn soft" onclick="resetCustomerFilters()">
+   ফিল্টার রিসেট
+  </button>
  </div>
+
  <div id="customerList"></div>
 </section>
 
+
 <!-- CUSTOMER DETAIL -->
 <section id="customerDetail" class="page">
- <button class="back" onclick="showPage('customerHome')">← কাস্টমার লিস্ট</button>
+
+ <button class="back" onclick="showPage('customerHome')">
+  ← কাস্টমার লিস্ট
+ </button>
+
  <div class="panel">
+
   <div class="top">
-   <div><h2 id="detailName"></h2><div class="muted" id="detailPhone"></div></div>
+   <div>
+    <h2 id="detailName"></h2>
+    <div class="muted" id="detailPhone"></div>
+   </div>
+
    <span class="badge" id="detailBadge">বাকি</span>
   </div>
+
   <div class="stats" style="margin-top:15px;margin-bottom:5px">
-   <div class="stat"><small>বর্তমান বাকি</small><strong id="detailBalance" class="redText">৳০</strong></div>
-   <div class="stat"><small>মোট জমা</small><strong id="detailPaid" class="greenText">৳০</strong></div>
+
+   <div class="stat">
+    <small>বর্তমান বাকি</small>
+    <strong id="detailBalance" class="redText">৳০</strong>
+   </div>
+
+   <div class="stat">
+    <small>মোট জমা</small>
+    <strong id="detailPaid" class="greenText">৳০</strong>
+   </div>
+
   </div>
+
   <div class="actions">
-   <button class="btn green" onclick="openMessage()">✉ মেসেজ পাঠান</button>
-   <button class="btn gray" onclick="editCurrentCustomer()">✎ তথ্য এডিট</button>
+   <button class="btn green" onclick="openMessage()">✉ মেসেজ</button>
+   <button class="btn gray" onclick="editCurrentCustomer()">✎ এডিট</button>
   </div>
-  <button class="btn red" style="width:100%;margin-top:9px" onclick="deleteCustomer()">কাস্টমার ডিলিট করুন</button>
+
+  <button
+   class="btn red"
+   style="width:100%;margin-top:9px"
+   onclick="deleteCustomer()"
+  >
+   কাস্টমার ডিলিট করুন
+  </button>
+
  </div>
+
  <div class="panel">
   <h3 style="margin:0 0 8px">নতুন লেনদেন</h3>
-  <div class="notice">বাকি নিলে প্রথম ঘরে, জমা দিলে দ্বিতীয় ঘরে লিখুন। একই সময়ে দুই ঘর পূরণ করবেন না।</div>
-  <div class="grid">
-   <div class="field"><label>বাকি নিলো (৳)</label><input type="number" min="0" id="txDue" placeholder="০"></div>
-   <div class="field"><label>জমা দিলো (৳)</label><input type="number" min="0" id="txPaid" placeholder="০"></div>
+
+  <div class="notice">
+   বাকি নিলে প্রথম ঘরে, জমা দিলে দ্বিতীয় ঘরে লিখুন।
+   একই সময়ে দুই ঘর পূরণ করবেন না।
   </div>
-  <div class="field"><label>বিবরণ (ঐচ্ছিক)</label><input id="txNote" placeholder="যেমন: চার্জার / নগদ জমা"></div>
-  <button class="btn primary green" onclick="saveTransaction()">লেনদেন সংরক্ষণ করুন</button>
+
+  <div class="grid">
+   <div class="field">
+    <label>বাকি নিলো (৳)</label>
+    <input type="number" min="0" id="txDue" placeholder="০">
+   </div>
+
+   <div class="field">
+    <label>জমা দিলো (৳)</label>
+    <input type="number" min="0" id="txPaid" placeholder="০">
+   </div>
+  </div>
+
+  <div class="field">
+   <label>বিবরণ (ঐচ্ছিক)</label>
+   <input id="txNote" placeholder="যেমন: চার্জার / নগদ জমা">
+  </div>
+
+  <button class="btn primary green" onclick="saveTransaction()">
+   লেনদেন সংরক্ষণ করুন
+  </button>
  </div>
+
  <div class="panel">
-  <div class="section" style="margin-top:0"><h3>লেনদেনের ইতিহাস</h3><span class="muted" id="txCount"></span></div>
+  <div class="section" style="margin-top:0">
+   <h3>লেনদেনের ইতিহাস</h3>
+   <span class="muted" id="txCount"></span>
+  </div>
+
   <div id="transactionList"></div>
  </div>
+
 </section>
+
 
 <!-- CUSTOMER FORM -->
 <section id="customerFormPage" class="page">
+
  <button class="back" onclick="backFromCustomerForm()">← ফিরে যান</button>
+
  <div class="panel">
+
   <h2 id="customerFormTitle">নতুন কাস্টমার</h2>
-  <div class="field"><label>কাস্টমারের নাম *</label><input id="newName" placeholder="নাম লিখুন"></div>
-  <div class="field"><label>মোবাইল নম্বর</label><input id="newPhone" type="tel" placeholder="01XXXXXXXXX"></div>
-  <div class="field" id="openingField"><label>শুরুর বাকি (৳)</label><input id="openingDue" type="number" min="0" placeholder="০"></div>
-  <button class="btn primary" onclick="saveCustomer()">কাস্টমার সংরক্ষণ করুন</button>
+
+  <div class="field">
+   <label>কাস্টমারের নাম *</label>
+   <input id="newName" placeholder="নাম লিখুন">
+  </div>
+
+  <div class="field">
+   <label>মোবাইল নম্বর</label>
+   <input id="newPhone" type="tel" placeholder="01XXXXXXXXX">
+  </div>
+
+  <div class="field" id="openingField">
+   <label>শুরুর বাকি (৳)</label>
+   <input id="openingDue" type="number" min="0" placeholder="০">
+  </div>
+
+  <button class="btn primary" onclick="saveCustomer()">
+   কাস্টমার সংরক্ষণ করুন
+  </button>
+
  </div>
 </section>
 
+
 <!-- STOCK HOME -->
 <section id="stockHome" class="page">
+
  <div class="stats">
-  <div class="stat"><small>মোট পণ্য</small><strong class="purpleText" id="totalProducts">০</strong></div>
-  <div class="stat"><small>মোট স্টক ইউনিট</small><strong class="blueText" id="totalUnits">০</strong></div>
+
+  <div class="stat">
+   <small>মোট পণ্য</small>
+   <strong class="purpleText" id="totalProducts">০</strong>
+  </div>
+
+  <div class="stat">
+   <small>মোট স্টক ইউনিট</small>
+   <strong class="blueText" id="totalUnits">০</strong>
+  </div>
+
  </div>
+
  <div class="stats">
-  <div class="stat"><small>কম স্টক (৫ বা কম)</small><strong class="redText" id="lowStockCount">০</strong></div>
-  <div class="stat"><small>স্টক শেষ</small><strong class="redText" id="outStockCount">০</strong></div>
+
+  <div class="stat">
+   <small>কম স্টক (৫ বা কম)</small>
+   <strong class="redText" id="lowStockCount">০</strong>
+  </div>
+
+  <div class="stat">
+   <small>স্টক শেষ</small>
+   <strong class="redText" id="outStockCount">০</strong>
+  </div>
+
  </div>
- <button class="btn primary purple" onclick="openProductForm()">＋ নতুন মাল যোগ করুন</button>
- <div class="section"><h3>মালের তালিকা</h3></div>
- <input class="search" id="productSearch" placeholder="🔍 পণ্যের নাম দিয়ে খুঁজুন" oninput="renderProducts()">
+
+ <!-- মোট স্টকের ক্রয়মূল্য -->
+ <div class="panel">
+  <small class="muted">বর্তমান স্টকের মোট ক্রয়মূল্য</small>
+  <strong
+   class="greenText"
+   id="totalStockValue"
+   style="display:block;font-size:25px;margin-top:5px"
+  >৳০</strong>
+  <div class="muted">প্রতিটি পণ্যের বর্তমান পরিমাণ × ক্রয়মূল্য</div>
+ </div>
+
+ <button class="btn primary purple" onclick="openProductForm()">
+  ＋ নতুন মাল যোগ করুন
+ </button>
+
+ <div class="section">
+  <h3>মালের তালিকা</h3>
+ </div>
+
+ <input
+  class="search"
+  id="productSearch"
+  placeholder="🔍 পণ্যের নাম দিয়ে খুঁজুন"
+  oninput="renderProducts()"
+ >
+
  <div class="controls">
   <select class="sort" id="productSort" onchange="renderProducts()">
    <option value="high">স্টক বেশি → কম</option>
@@ -184,725 +628,1274 @@ h2{font-size:21px;margin:0 0 4px}
    <option value="name">নাম অনুযায়ী</option>
    <option value="price">দাম বেশি → কম</option>
   </select>
-  <button class="btn soft" onclick="resetProductFilters()">ফিল্টার রিসেট</button>
+
+  <button class="btn soft" onclick="resetProductFilters()">
+   ফিল্টার রিসেট
+  </button>
  </div>
+
  <div id="productList"></div>
 </section>
 
+
 <!-- PRODUCT DETAIL -->
 <section id="productDetail" class="page">
- <button class="back" onclick="showPage('stockHome')">← মালের তালিকা</button>
+
+ <button class="back" onclick="showPage('stockHome')">
+  ← মালের তালিকা
+ </button>
+
  <div class="panel">
-  <h2 id="productDetailName"></h2><div class="muted">পণ্যের বিস্তারিত</div>
+
+  <h2 id="productDetailName"></h2>
+  <div class="muted">পণ্যের বিস্তারিত</div>
+
   <div class="stats" style="margin-top:15px">
-   <div class="stat"><small>বর্তমান স্টক</small><strong id="productDetailQty" class="blueText">০</strong></div>
-   <div class="stat"><small>প্রতি ইউনিট ক্রয়মূল্য</small><strong id="productDetailPrice" class="greenText">৳০</strong></div>
+
+   <div class="stat">
+    <small>বর্তমান স্টক</small>
+    <strong id="productDetailQty" class="blueText">০</strong>
+   </div>
+
+   <div class="stat">
+    <small>প্রতি ইউনিট ক্রয়মূল্য</small>
+    <strong id="productDetailPrice" class="greenText">৳০</strong>
+   </div>
+
   </div>
+
   <div class="muted" id="productDetailNote"></div>
+
   <div class="actions">
    <button class="btn gray" onclick="editCurrentProduct()">✎ এডিট</button>
    <button class="btn red" onclick="deleteProduct()">পণ্য ডিলিট</button>
   </div>
+
  </div>
+
  <div class="panel">
+
   <h3 style="margin:0 0 10px">স্টক আপডেট</h3>
+
   <div class="grid">
-   <div class="field"><label>মাল যোগ করুন (+)</label><input id="stockAdd" type="number" min="0" placeholder="পরিমাণ"></div>
-   <div class="field"><label>মাল বের করুন (−)</label><input id="stockRemove" type="number" min="0" placeholder="পরিমাণ"></div>
+
+   <div class="field">
+    <label>মাল যোগ করুন (+)</label>
+    <input id="stockAdd" type="number" min="0" placeholder="পরিমাণ">
+   </div>
+
+   <div class="field">
+    <label>মাল বের করুন (−)</label>
+    <input id="stockRemove" type="number" min="0" placeholder="পরিমাণ">
+   </div>
+
   </div>
-  <button class="btn primary green" onclick="updateStock()">স্টক আপডেট করুন</button>
+
+  <button class="btn primary green" onclick="updateStock()">
+   স্টক আপডেট করুন
+  </button>
+
  </div>
 </section>
+
 
 <!-- PRODUCT FORM -->
 <section id="productFormPage" class="page">
+
  <button class="back" onclick="backFromProductForm()">← ফিরে যান</button>
+
  <div class="panel">
+
   <h2 id="productFormTitle">নতুন পণ্য যোগ</h2>
-  <div class="field"><label>পণ্যের নাম *</label><input id="productName" placeholder="যেমন: চার্জার"></div>
-  <div class="grid">
-   <div class="field"><label>ক্রয়মূল্য (৳)</label><input type="number" id="productPrice" min="0" placeholder="০"></div>
-   <div class="field"><label>পরিমাণ *</label><input type="number" id="productQty" min="0" placeholder="০"></div>
+
+  <div class="field">
+   <label>পণ্যের নাম *</label>
+   <input id="productName" placeholder="যেমন: চার্জার">
   </div>
-  <div class="field"><label>বিবরণ (ঐচ্ছিক)</label><input id="productNote" placeholder="পণ্যের তথ্য"></div>
-  <button class="btn primary purple" onclick="saveProduct()">পণ্য সংরক্ষণ করুন</button>
+
+  <div class="grid">
+
+   <div class="field">
+    <label>ক্রয়মূল্য (৳)</label>
+    <input type="number" id="productPrice" min="0" placeholder="০">
+   </div>
+
+   <div class="field">
+    <label>পরিমাণ *</label>
+    <input type="number" id="productQty" min="0" placeholder="০">
+   </div>
+
+  </div>
+
+  <div class="field">
+   <label>বিবরণ (ঐচ্ছিক)</label>
+   <input id="productNote" placeholder="পণ্যের তথ্য">
+  </div>
+
+  <button class="btn primary purple" onclick="saveProduct()">
+   পণ্য সংরক্ষণ করুন
+  </button>
+
  </div>
 </section>
 
+
 <!-- BACKUP -->
 <section id="backupPage" class="page">
+
  <button class="back" onclick="showPage('customerHome')">← ফিরে যান</button>
+
  <div class="panel">
+
   <h2>ডেটা ব্যাকআপ ও রিস্টোর</h2>
-  <p class="muted">কাস্টমারদের হিসাব, লেনদেন ও মালের স্টক একসঙ্গে ব্যাকআপ হবে।</p>
-  <button class="btn primary" onclick="downloadBackup()">⬇ ব্যাকআপ ডাউনলোড</button>
+
+  <p class="muted">
+   কাস্টমারদের হিসাব, লেনদেন ও মালের স্টক একসঙ্গে ব্যাকআপ হবে।
+  </p>
+
+  <button class="btn primary" onclick="downloadBackup()">
+   ⬇ ব্যাকআপ ডাউনলোড
+  </button>
+
   <div class="field">
    <label>আগের ব্যাকআপ ফাইল ফিরিয়ে আনুন</label>
    <input type="file" id="restoreFile" accept=".json,application/json">
   </div>
-  <button class="btn green" onclick="restoreBackup()">ব্যাকআপ রিস্টোর করুন</button>
-  <div class="notice">রিস্টোর করলে বর্তমান হিসাবের পরিবর্তে ব্যাকআপ ফাইলের হিসাব বসবে। তাই আগে বর্তমান ডেটা ব্যাকআপ রাখুন।</div>
+
+  <button class="btn green" onclick="restoreBackup()">
+   ব্যাকআপ রিস্টোর করুন
+  </button>
+
+  <div class="notice">
+   রিস্টোর করলে বর্তমান হিসাবের পরিবর্তে ব্যাকআপ ফাইলের হিসাব বসবে।
+   তাই আগে বর্তমান ডেটা ব্যাকআপ রাখুন।
+  </div>
+
  </div>
 </section>
 
-<div class="section"><button class="btn soft" onclick="showPage('backupPage')">🛡 ব্যাকআপ ও রিস্টোর</button></div>
-<div class="footer">দোকান হিসাব • আপনার ব্যবসার হিসাব, আপনার নিয়ন্ত্রণে</div>
+
+<div class="section">
+ <button class="btn soft" onclick="showPage('backupPage')">
+  🛡 ব্যাকআপ ও রিস্টোর
+ </button>
+</div>
+
+<div class="footer">
+ দোকান হিসাব • আপনার ব্যবসার হিসাব, আপনার নিয়ন্ত্রণে
+</div>
+
 </main>
 </div>
+
 
 <!-- MESSAGE DIALOG -->
 <div class="overlay" id="messageDialog">
  <div class="dialog">
+
   <h3>✉ কাস্টমারকে মেসেজ</h3>
+
   <p>পাঠানোর আগে মেসেজটি দেখে প্রয়োজন হলে পরিবর্তন করুন।</p>
-  <div class="field"><label>মেসেজ</label><textarea id="messageText"></textarea></div>
+
+  <div class="field">
+   <label>মেসেজ</label>
+   <textarea id="messageText"></textarea>
+  </div>
+
   <div class="dialogActions">
    <button class="btn gray" onclick="closeDialog()">বন্ধ</button>
    <button class="btn green" onclick="sendWhatsApp()">WhatsApp</button>
   </div>
-  <button class="btn soft" style="width:100%;margin-top:9px" onclick="shareMessage()">অন্য অ্যাপে শেয়ার</button>
+
+  <div class="actions">
+   <button class="btn soft" onclick="copyCustomerMessage()">মেসেজ কপি</button>
+   <button class="btn soft" onclick="shareMessage()">অন্য অ্যাপে শেয়ার</button>
+  </div>
+
  </div>
 </div>
+
 
 <!-- CONFIRM DIALOG -->
 <div class="overlay" id="confirmDialog">
  <div class="dialog">
+
   <h3 id="confirmTitle">সতর্কতা</h3>
   <p id="confirmText"></p>
+
   <div class="dialogActions">
    <button class="btn gray" onclick="resolveConfirm(false)">বাতিল</button>
    <button class="btn red" onclick="resolveConfirm(true)">হ্যাঁ, নিশ্চিত</button>
   </div>
+
  </div>
 </div>
 
+
 <script>
 const KEY='dokanHisab_v4';
-const seed=[
- ['বাপ্পি',15000],['নিরব ভাইয়া',9600],['রব্বানি CID',5040],
- ['জাহাঙ্গীর চাচা',5000],['জামিল ভাই',3615],['রাশেদ ভাইয়া',3200],
- ['ফরহাদ মামা',2000],['খাদেমুল',1500],['রিপন ভাই',1500],
- ['সোহেল ভাই',1000],['রাকিব',610],['নিজাম',480],
- ['লিমন আংকেল',400],['সিহাব শুভ',260],['রোকন স্যার',200],
- ['অমূল্য বর্মণ',50],['জাহিদ',10]
-];
-let data={customers:[],products:[]};
-let currentCustomer=null,currentProduct=null;
-let editingCustomer=null,editingProduct=null,confirmResolver=null;
 
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function money(n){return '৳'+Number(n||0).toLocaleString('en-US')}
-function bn(n){return Number(n||0).toLocaleString('bn-BD')}
-function now(){return new Date().toISOString()}
-function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function balance(c){return Number(c.opening||0)+c.transactions.reduce((s,t)=>s+(t.type==='due'?t.amount:-t.amount),0)}
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+const seed=[
+ ['বাপ্পি',15000],
+ ['নিরব ভাইয়া',9600],
+ ['রব্বানি CID',5040],
+ ['জাহাঙ্গীর চাচা',5000],
+ ['জামিল ভাই',3615],
+ ['রাশেদ ভাইয়া',3200],
+ ['ফরহাদ মামা',2000],
+ ['খাদেমুল',1500],
+ ['রিপন ভাই',1500],
+ ['সোহেল ভাই',1000],
+ ['রাকিব',610],
+ ['নিজাম',480],
+ ['লিমন আংকেল',400],
+ ['সিহাব শুভ',260],
+ ['রোকন স্যার',200],
+ ['অমূল্য বর্মণ',50],
+ ['জাহিদ',10]
+];
+
+let data={customers:[],products:[]};
+
+let currentCustomer=null;
+let currentProduct=null;
+let editingCustomer=null;
+let editingProduct=null;
+let confirmResolver=null;
+
+
+function uid(){
+ return Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+
+function money(n){
+ return '৳'+Number(n||0).toLocaleString('en-US');
+}
+
+function bn(n){
+ return Number(n||0).toLocaleString('bn-BD');
+}
+
+function now(){
+ return new Date().toISOString();
+}
+
+function safe(s){
+ return String(s??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+function balance(c){
+ return Number(c.opening||0)+
+  c.transactions.reduce((s,t)=>s+(t.type==='due'?t.amount:-t.amount),0);
+}
+
+function save(){
+ localStorage.setItem(KEY,JSON.stringify(data));
+}
+
 function fmtDate(v){
  const d=new Date(v);
- return d.toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'})+' • '+d.toLocaleTimeString('bn-BD',{hour:'numeric',minute:'2-digit'});
+ return d.toLocaleDateString('bn-BD',{
+  day:'numeric',month:'short',year:'numeric'
+ })+' • '+d.toLocaleTimeString('bn-BD',{
+  hour:'numeric',minute:'2-digit'
+ });
 }
+
+
+/* CONFIRM DIALOG */
+
 function confirmAction(title,message){
  return new Promise(resolve=>{
   confirmResolver=resolve;
+
   document.getElementById('confirmTitle').textContent=title;
   document.getElementById('confirmText').textContent=message;
+
   document.getElementById('confirmDialog').classList.add('show');
  });
 }
+
 function resolveConfirm(result){
  document.getElementById('confirmDialog').classList.remove('show');
- if(confirmResolver){confirmResolver(result);confirmResolver=null}
+
+ if(confirmResolver){
+  confirmResolver(result);
+  confirmResolver=null;
+ }
 }
+
+
+/* LOAD DATA */
+
 function load(){
  try{
   const old=JSON.parse(localStorage.getItem(KEY)||'null');
+
   if(old&&Array.isArray(old.customers)){
+
    data.customers=old.customers.map(c=>({
-    id:c.id||uid(),name:c.name||'নাম নেই',phone:c.phone||'',
+    id:c.id||uid(),
+    name:c.name||'নাম নেই',
+    phone:c.phone||'',
     opening:Number(c.opening||0),
-    transactions:Array.isArray(c.transactions)?c.transactions.map(t=>({
-     id:t.id||uid(),type:t.type==='due'?'due':'paid',
-     amount:Number(t.amount||0),note:t.note||'',date:t.date||now()
-    })):[]
+
+    transactions:Array.isArray(c.transactions)?
+     c.transactions.map(t=>({
+      id:t.id||uid(),
+      type:t.type==='due'?'due':'paid',
+      amount:Number(t.amount||0),
+      note:t.note||'',
+      date:t.date||now()
+     })):[]
    }));
-   data.products=Array.isArray(old.products)?old.products.map(p=>({
-    id:p.id||uid(),name:p.name||'নাম নেই',price:Number(p.price||0),
-    qty:Number(p.qty||0),note:p.note||''
-   })):[];
+
+   data.products=Array.isArray(old.products)?
+    old.products.map(p=>({
+     id:p.id||uid(),
+     name:p.name||'নাম নেই',
+     price:Number(p.price||0),
+     qty:Number(p.qty||0),
+     note:p.note||''
+    })):[];
   }
- }catch(e){alert('আগের ডেটা পড়তে সমস্যা হয়েছে।')}
+
+ }catch(e){
+  alert('আগের ডেটা পড়তে সমস্যা হয়েছে।');
+ }
+
  // পুরোনো ডেটায় না থাকলে শুধু অনুপস্থিত প্রাথমিক কাস্টমার যোগ হবে।
  seed.forEach(([name,amount])=>{
-  if(!data.customers.some(c=>c.name.trim().toLowerCase()===name.toLowerCase())){
-   data.customers.push({id:uid(),name,phone:'',opening:amount,transactions:[]});
+  if(!data.customers.some(c=>
+   c.name.trim().toLowerCase()===name.toLowerCase()
+  )){
+   data.customers.push({
+    id:uid(),
+    name,
+    phone:'',
+    opening:amount,
+    transactions:[]
+   });
   }
  });
+
  save();
 }
+
+
+/* PAGE NAVIGATION */
+
 function showPage(id){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(x=>
+  x.classList.remove('active')
+ );
+
  document.getElementById(id).classList.add('active');
+
  window.scrollTo({top:0,behavior:'smooth'});
+
  renderAll();
 }
+
 function switchTab(tab){
- document.getElementById('tabCustomers').classList.toggle('active',tab==='customers');
- document.getElementById('tabStock').classList.toggle('active',tab==='stock');
+ document.getElementById('tabCustomers')
+  .classList.toggle('active',tab==='customers');
+
+ document.getElementById('tabStock')
+  .classList.toggle('active',tab==='stock');
+
  showPage(tab==='customers'?'customerHome':'stockHome');
 }
+
 function renderAll(){
- renderCustomers();renderProducts();
+ renderCustomers();
+ renderProducts();
+
  if(currentCustomer)renderCustomerDetail();
  if(currentProduct)renderProductDetail();
 }
 
-/* CUSTOMER LIST + SORT */
+
+/* CUSTOMER LIST */
+
 function renderCustomers(){
+
  const q=(document.getElementById('customerSearch')?.value||'').toLowerCase();
  const sort=document.getElementById('customerSort')?.value||'high';
- let arr=data.customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+
+ let arr=data.customers.filter(c=>
+  c.name.toLowerCase().includes(q)||
+  c.phone.includes(q)
+ );
+
  if(sort==='high')arr.sort((a,b)=>balance(b)-balance(a));
  if(sort==='low')arr.sort((a,b)=>balance(a)-balance(b));
- if(sort==='none')arr=arr.filter(c=>balance(c)===0).sort((a,b)=>a.name.localeCompare(b.name,'bn'));
+
+ if(sort==='none'){
+  arr=arr.filter(c=>balance(c)===0)
+   .sort((a,b)=>a.name.localeCompare(b.name,'bn'));
+ }
+
  if(sort==='name')arr.sort((a,b)=>a.name.localeCompare(b.name,'bn'));
  if(sort==='recent')arr.reverse();
- const due=data.customers.reduce((s,c)=>s+Math.max(0,balance(c)),0);
+
+ const due=data.customers.reduce((s,c)=>
+  s+Math.max(0,balance(c)),0
+ );
+
  document.getElementById('totalCustomers').textContent=bn(data.customers.length);
  document.getElementById('totalDue').textContent=money(due);
  document.getElementById('customerCount').textContent=bn(arr.length)+' জন';
+
  const box=document.getElementById('customerList');
- if(!arr.length){box.innerHTML='<div class="empty"><b>কোনো কাস্টমার পাওয়া যায়নি</b>নতুন কাস্টমার যোগ করুন।</div>';return}
+
+ if(!arr.length){
+  box.innerHTML='<div class="empty"><b>কোনো কাস্টমার পাওয়া যায়নি</b>নতুন কাস্টমার যোগ করুন।</div>';
+  return;
+ }
+
  box.innerHTML=arr.map(c=>{
   let b=balance(c);
-  return `<div class="item" onclick="openCustomer('${c.id}')">
+
+  return `
+  <div class="item" onclick="openCustomer('${c.id}')">
    <div class="avatar">${safe(c.name.charAt(0))}</div>
-   <div class="info"><b>${safe(c.name)}</b><small>${safe(c.phone||'মোবাইল নম্বর নেই')}</small></div>
-   <div class="amount ${b<=0?'ok':''}">${money(b)}</div><span class="arrow">›</span>
-  </div>`;
+
+   <div class="info">
+    <b>${safe(c.name)}</b>
+    <small>${safe(c.phone||'মোবাইল নম্বর নেই')}</small>
+   </div>
+
+   <div class="amount ${b<=0?'ok':''}">${money(b)}</div>
+   <span class="arrow">›</span>
+  </div>
+  `;
  }).join('');
 }
+
 function resetCustomerFilters(){
  document.getElementById('customerSearch').value='';
- document.getElementById('customerSort').value='high';renderCustomers();
+ document.getElementById('customerSort').value='high';
+ renderCustomers();
 }
+
+
+/* CUSTOMER FORM */
+
 function openCustomerForm(){
  editingCustomer=null;
+
  document.getElementById('customerFormTitle').textContent='নতুন কাস্টমার যোগ';
  document.getElementById('newName').value='';
  document.getElementById('newPhone').value='';
  document.getElementById('openingDue').value='';
+
  document.getElementById('openingField').classList.remove('hidden');
+
  showPage('customerFormPage');
 }
-function backFromCustomerForm(){showPage(editingCustomer?'customerDetail':'customerHome')}
+
+function backFromCustomerForm(){
+ showPage(editingCustomer?'customerDetail':'customerHome');
+}
+
 function saveCustomer(){
+
  const name=document.getElementById('newName').value.trim();
  const phone=document.getElementById('newPhone').value.trim();
  const opening=Number(document.getElementById('openingDue').value||0);
+
  if(!name)return alert('কাস্টমারের নাম লিখুন।');
- if(!Number.isFinite(opening)||opening<0)return alert('শুরুর বাকি সঠিকভাবে লিখুন।');
+
+ if(!Number.isFinite(opening)||opening<0)
+  return alert('শুরুর বাকি সঠিকভাবে লিখুন।');
+
  if(editingCustomer){
-  const c=data.customers.find(x=>x.id===editingCustomer);if(!c)return;
-  if(data.customers.some(x=>x.id!==c.id&&x.name.toLowerCase()===name.toLowerCase()))return alert('এই নামে কাস্টমার আগে থেকেই আছে।');
-  c.name=name;c.phone=phone;currentCustomer=c.id;
+
+  const c=data.customers.find(x=>x.id===editingCustomer);
+  if(!c)return;
+
+  if(data.customers.some(x=>
+   x.id!==c.id&&x.name.toLowerCase()===name.toLowerCase()
+  )){
+   return alert('এই নামে কাস্টমার আগে থেকেই আছে।');
+  }
+
+  c.name=name;
+  c.phone=phone;
+  currentCustomer=c.id;
+
  }else{
-  if(data.customers.some(c=>c.name.toLowerCase()===name.toLowerCase()))return alert('এই নামে কাস্টমার আগে থেকেই আছে।');
-  const c={id:uid(),name,phone,opening,transactions:[]};
-  data.customers.unshift(c);currentCustomer=c.id;
+
+  if(data.customers.some(c=>
+   c.name.toLowerCase()===name.toLowerCase()
+  )){
+   return alert('এই নামে কাস্টমার আগে থেকেই আছে।');
+  }
+
+  const c={
+   id:uid(),
+   name,
+   phone,
+   opening,
+   transactions:[]
+  };
+
+  data.customers.unshift(c);
+  currentCustomer=c.id;
  }
- save();showPage('customerDetail');
+
+ save();
+ showPage('customerDetail');
 }
-function openCustomer(id){currentCustomer=id;showPage('customerDetail')}
+
+function openCustomer(id){
+ currentCustomer=id;
+ showPage('customerDetail');
+}
+
+
+/* CUSTOMER DETAIL */
+
 function renderCustomerDetail(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
  const b=balance(c);
+
  document.getElementById('detailName').textContent=c.name;
- document.getElementById('detailPhone').textContent=c.phone||'মোবাইল নম্বর যোগ করা হয়নি';
+
+ document.getElementById('detailPhone').textContent=
+  c.phone||'মোবাইল নম্বর যোগ করা হয়নি';
+
  document.getElementById('detailBalance').textContent=money(b);
- document.getElementById('detailBadge').textContent=b>0?'বাকি আছে':b<0?'অগ্রিম জমা':'হিসাব ক্লিয়ার';
- document.getElementById('detailBadge').className='badge '+(b<=0?'ok':'');
- document.getElementById('detailPaid').textContent=money(c.transactions.filter(t=>t.type==='paid').reduce((s,t)=>s+t.amount,0));
- const txs=[...c.transactions].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+ document.getElementById('detailBadge').textContent=
+  b>0?'বাকি আছে':b<0?'অগ্রিম জমা':'হিসাব ক্লিয়ার';
+
+ document.getElementById('detailBadge').className=
+  'badge '+(b<=0?'ok':'');
+
+ document.getElementById('detailPaid').textContent=money(
+  c.transactions
+   .filter(t=>t.type==='paid')
+   .reduce((s,t)=>s+t.amount,0)
+ );
+
+ const txs=[...c.transactions].sort((a,b)=>
+  new Date(b.date)-new Date(a.date)
+ );
+
  document.getElementById('txCount').textContent=bn(txs.length)+'টি';
- document.getElementById('transactionList').innerHTML=txs.length?txs.map(t=>`
- <div class="transaction">
-  <div class="txrow"><b>${t.type==='due'?'বাকি নিয়েছে':'জমা দিয়েছে'}</b>
-   <b style="color:${t.type==='due'?'#dc2626':'#059669'}">${t.type==='due'?'+':'−'}${money(t.amount)}</b></div>
-  <div class="txmeta">${fmtDate(t.date)}</div>
-  ${t.note?`<div class="txnote">${safe(t.note)}</div>`:''}
-  <div class="txbuttons">
-   <button onclick="shareTransaction('${t.id}')">শেয়ার</button>
-   <button onclick="deleteTransaction('${t.id}')">মুছে ফেলুন</button>
+
+ document.getElementById('transactionList').innerHTML=
+  txs.length?txs.map(t=>`
+
+  <div class="transaction">
+
+   <div class="txrow">
+    <b>${t.type==='due'?'বাকি নিয়েছে':'জমা দিয়েছে'}</b>
+
+    <b style="color:${t.type==='due'?'#dc2626':'#059669'}">
+     ${t.type==='due'?'+':'−'}${money(t.amount)}
+    </b>
+   </div>
+
+   <div class="txmeta">${fmtDate(t.date)}</div>
+
+   ${t.note?`<div class="txnote">${safe(t.note)}</div>`:''}
+
+   <div class="txbuttons">
+    <button onclick="shareTransaction('${t.id}')">শেয়ার</button>
+    <button onclick="deleteTransaction('${t.id}')">মুছে ফেলুন</button>
+   </div>
+
   </div>
- </div>`).join(''):'<div class="empty">এখনো কোনো লেনদেন নেই।</div>';
+
+  `).join(''):'<div class="empty">এখনো কোনো লেনদেন নেই।</div>';
 }
+
+
+/* SAVE TRANSACTION */
+
 function saveTransaction(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
  const due=Number(document.getElementById('txDue').value||0);
  const paid=Number(document.getElementById('txPaid').value||0);
- if(due<0||paid<0||!Number.isFinite(due)||!Number.isFinite(paid))return alert('সঠিক পরিমাণ লিখুন।');
- if((due>0&&paid>0)||(!due&&!paid))return alert('বাকি অথবা জমা—যেকোনো একটি ঘর পূরণ করুন।');
- c.transactions.push({id:uid(),type:due>0?'due':'paid',amount:due||paid,note:document.getElementById('txNote').value.trim(),date:now()});
- ['txDue','txPaid','txNote'].forEach(id=>document.getElementById(id).value='');
- save();renderCustomerDetail();renderCustomers();
+
+ if(due<0||paid<0||!Number.isFinite(due)||!Number.isFinite(paid))
+  return alert('সঠিক পরিমাণ লিখুন।');
+
+ if((due>0&&paid>0)||(!due&&!paid))
+  return alert('বাকি অথবা জমা—যেকোনো একটি ঘর পূরণ করুন।');
+
+ c.transactions.push({
+  id:uid(),
+  type:due>0?'due':'paid',
+  amount:due||paid,
+  note:document.getElementById('txNote').value.trim(),
+  date:now()
+ });
+
+ ['txDue','txPaid','txNote'].forEach(id=>
+  document.getElementById(id).value=''
+ );
+
+ save();
+ renderCustomerDetail();
+ renderCustomers();
 }
+
+
+/* DELETE TRANSACTION */
+
 async function deleteTransaction(id){
- const ok=await confirmAction('লেনদেন মুছে ফেলবেন?','এই লেনদেন মুছে গেলে কাস্টমারের বর্তমান বাকি পরিবর্তিত হবে। কাজটি ফিরিয়ে আনা যাবে না।');
+
+ const ok=await confirmAction(
+  'লেনদেন মুছে ফেলবেন?',
+  'এই লেনদেন মুছে গেলে কাস্টমারের বর্তমান বাকি পরিবর্তিত হবে। কাজটি ফিরিয়ে আনা যাবে না।'
+ );
+
  if(!ok)return;
+
  const c=data.customers.find(x=>x.id===currentCustomer);
- c.transactions=c.transactions.filter(t=>t.id!==id);save();renderCustomerDetail();renderCustomers();
+ if(!c)return;
+
+ c.transactions=c.transactions.filter(t=>t.id!==id);
+
+ save();
+ renderCustomerDetail();
+ renderCustomers();
 }
+
+
+/* EDIT CUSTOMER */
+
 function editCurrentCustomer(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
  editingCustomer=c.id;
+
  document.getElementById('customerFormTitle').textContent='কাস্টমারের তথ্য পরিবর্তন';
  document.getElementById('newName').value=c.name;
  document.getElementById('newPhone').value=c.phone;
+
  document.getElementById('openingField').classList.add('hidden');
+
  showPage('customerFormPage');
 }
+
+
+/* DELETE CUSTOMER */
+
 async function deleteCustomer(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
- const ok=await confirmAction('কাস্টমার ডিলিট করবেন?','সতর্কতা: '+c.name+'-এর সব লেনদেনসহ সম্পূর্ণ হিসাব মুছে যাবে। আগে ব্যাকআপ রাখা ভালো। এই কাজ ফিরিয়ে আনা যাবে না।');
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
+ const ok=await confirmAction(
+  'কাস্টমার ডিলিট করবেন?',
+  'সতর্কতা: '+c.name+'-এর সব লেনদেনসহ সম্পূর্ণ হিসাব মুছে যাবে। আগে ব্যাকআপ রাখা ভালো। এই কাজ ফিরিয়ে আনা যাবে না।'
+ );
+
  if(!ok)return;
+
  data.customers=data.customers.filter(x=>x.id!==currentCustomer);
- currentCustomer=null;save();showPage('customerHome');
+
+ currentCustomer=null;
+
+ save();
+ showPage('customerHome');
 }
 
-/* SHARE CUSTOMER LIST */
+
+/* CUSTOMER LIST TEXT */
+
 function customerListText(){
+
  const arr=[...data.customers].sort((a,b)=>balance(b)-balance(a));
- const total=arr.reduce((s,c)=>s+Math.max(0,balance(c)),0);
- let lines=arr.map((c,i)=>`${i+1}. ${c.name} — ${money(balance(c))}`).join('\n');
- return `📒 দোকানের বাকির খাতা\nতারিখ: ${new Date().toLocaleDateString('bn-BD')}\n\n${lines}\n\nমোট কাস্টমার: ${bn(arr.length)} জন\nসর্বমোট বাকি: ${money(total)}`;
+
+ const total=arr.reduce((s,c)=>
+  s+Math.max(0,balance(c)),0
+ );
+
+ const lines=arr.map((c,i)=>
+  `${i+1}. ${c.name} — ${money(balance(c))}`
+ ).join('\n');
+
+ return `📒 দোকানের বাকির খাতা
+তারিখ: ${new Date().toLocaleDateString('bn-BD')}
+
+${lines}
+
+মোট কাস্টমার: ${bn(arr.length)} জন
+সর্বমোট বাকি: ${money(total)}`;
 }
-async function shareCustomerList(){
+
+
+/* WHATSAPP CUSTOMER LIST */
+
+function shareCustomerList(){
+
+ if(!data.customers.length)
+  return alert('কোনো কাস্টমার নেই।');
+
  const text=customerListText();
- if(navigator.share){
-  try{await navigator.share({title:'দোকানের বাকির খাতা',text})}catch(e){}
- }else{
-  try{await navigator.clipboard.writeText(text);alert('লিস্ট কপি হয়েছে। WhatsApp-এ পেস্ট করুন।')}
-  catch(e){alert('শেয়ার সুবিধা পাওয়া যাচ্ছে না।')}
- }
+
+ const url='https://wa.me/8801783036819?text='+encodeURIComponent(text);
+
+ window.open(url,'_blank');
 }
+
+
+/* COPY CUSTOMER LIST */
+
 async function copyCustomerList(){
- try{await navigator.clipboard.writeText(customerListText());alert('পুরো কাস্টমার লিস্ট কপি হয়েছে।')}
- catch(e){alert('কপি করা যায়নি। আপনার ব্রাউজারে Clipboard অনুমতি দিন।')}
+
+ const text=customerListText();
+
+ await copyText(text,'পুরো কাস্টমার লিস্ট কপি হয়েছে।');
 }
+
+
+/* INDIVIDUAL CUSTOMER MESSAGE */
+
 function messageFor(c){
- return `আসসালামু আলাইকুম ${c.name}।\nআপনার বর্তমান বাকি: ${money(balance(c))}।\nদোকানের হিসাব অনুযায়ী তথ্যটি জানানো হলো। কোনো ভুল থাকলে জানাবেন। ধন্যবাদ।`;
+
+ return `আসসালামু আলাইকুম ${c.name}।
+
+আপনার বর্তমান বাকি: ${money(balance(c))}।
+
+দোকানের হিসাব অনুযায়ী তথ্যটি জানানো হলো।
+কোনো ভুল থাকলে জানাবেন।
+
+ধন্যবাদ।`;
 }
+
 function openMessage(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
  document.getElementById('messageText').value=messageFor(c);
+
  document.getElementById('messageDialog').classList.add('show');
 }
-function closeDialog(){document.getElementById('messageDialog').classList.remove('show')}
-function sendWhatsApp(){
- const c=data.customers.find(x=>x.id===currentCustomer);if(!c)return;
- if(!c.phone)return alert('আগে কাস্টমারের মোবাইল নম্বর যোগ করুন।');
- let phone=c.phone.replace(/\D/g,'');
- if(phone.startsWith('0'))phone='88'+phone;
- window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(document.getElementById('messageText').value),'_blank');
-}
-async function shareMessage(){
- const text=document.getElementById('messageText').value;
- if(navigator.share){try{await navigator.share({text})}catch(e){}}
- else{try{await navigator.clipboard.writeText(text);alert('মেসেজ কপি হয়েছে।')}catch(e){alert('কপি করা যায়নি।')}}
-}
-function shareTransaction(id){
- const c=data.customers.find(x=>x.id===currentCustomer);
- const t=c.transactions.find(x=>x.id===id);if(!t)return;
- const text=`${c.name}\n${t.type==='due'?'বাকি নিয়েছে':'জমা দিয়েছে'}: ${money(t.amount)}\nতারিখ: ${fmtDate(t.date)}\nবর্তমান বাকি: ${money(balance(c))}\n${t.note||''}`;
- if(navigator.share)navigator.share({text}).catch(()=>{});
- else navigator.clipboard.writeText(text).then(()=>alert('তথ্য কপি হয়েছে।'));
+
+function closeDialog(){
+ document.getElementById('messageDialog').classList.remove('show');
 }
 
+
+/* WHATSAPP INDIVIDUAL */
+
+function sendWhatsApp(){
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
+ if(!c.phone)
+  return alert('আগে কাস্টমারের মোবাইল নম্বর যোগ করুন।');
+
+ let phone=c.phone.replace(/\D/g,'');
+
+ if(phone.startsWith('0'))phone='88'+phone;
+
+ const text=document.getElementById('messageText').value;
+
+ window.open(
+  'https://wa.me/'+phone+'?text='+encodeURIComponent(text),
+  '_blank'
+ );
+}
+
+
+/* COPY MESSAGE */
+
+async function copyCustomerMessage(){
+
+ const text=document.getElementById('messageText').value;
+
+ await copyText(text,'কাস্টমারের মেসেজ কপি হয়েছে।');
+}
+
+
+/* UNIVERSAL COPY */
+
+async function copyText(text,successMessage){
+
+ try{
+
+  if(navigator.clipboard&&window.isSecureContext){
+   await navigator.clipboard.writeText(text);
+  }else{
+
+   const area=document.createElement('textarea');
+
+   area.value=text;
+   area.style.position='fixed';
+   area.style.opacity='0';
+
+   document.body.appendChild(area);
+
+   area.select();
+
+   const copied=document.execCommand('copy');
+
+   area.remove();
+
+   if(!copied)throw new Error('copy failed');
+  }
+
+  alert(successMessage);
+
+ }catch(e){
+
+  alert('কপি করা যায়নি। ব্রাউজারের Clipboard অনুমতি পরীক্ষা করুন।');
+
+ }
+}
+
+
+/* SHARE MESSAGE */
+
+async function shareMessage(){
+
+ const text=document.getElementById('messageText').value;
+
+ if(navigator.share){
+
+  try{
+   await navigator.share({text});
+  }catch(e){}
+
+ }else{
+
+  await copyText(text,'মেসেজ কপি হয়েছে।');
+ }
+}
+
+
+/* SHARE TRANSACTION */
+
+function shareTransaction(id){
+
+ const c=data.customers.find(x=>x.id===currentCustomer);
+ if(!c)return;
+
+ const t=c.transactions.find(x=>x.id===id);
+ if(!t)return;
+
+ const text=`${c.name}
+
+${t.type==='due'?'বাকি নিয়েছে':'জমা দিয়েছে'}: ${money(t.amount)}
+
+তারিখ: ${fmtDate(t.date)}
+
+বর্তমান বাকি: ${money(balance(c))}
+
+${t.note||''}`;
+
+ if(navigator.share){
+  navigator.share({text}).catch(()=>{});
+ }else{
+  copyText(text,'লেনদেনের তথ্য কপি হয়েছে।');
+ }
+}
+
+
 /* STOCK */
+
 function renderProducts(){
+
  const q=(document.getElementById('productSearch')?.value||'').toLowerCase();
+
  const sort=document.getElementById('productSort')?.value||'high';
- let arr=data.products.filter(p=>p.name.toLowerCase().includes(q));
+
+ let arr=data.products.filter(p=>
+  p.name.toLowerCase().includes(q)
+ );
+
  if(sort==='high')arr.sort((a,b)=>b.qty-a.qty);
  if(sort==='low')arr.sort((a,b)=>a.qty-b.qty);
  if(sort==='out')arr=arr.filter(p=>p.qty===0);
  if(sort==='name')arr.sort((a,b)=>a.name.localeCompare(b.name,'bn'));
  if(sort==='price')arr.sort((a,b)=>b.price-a.price);
+
+ const totalUnits=data.products.reduce((s,p)=>s+p.qty,0);
+
+ const totalValue=data.products.reduce(
+  (s,p)=>s+(Number(p.qty)*Number(p.price)),0
+ );
+
  document.getElementById('totalProducts').textContent=bn(data.products.length);
- document.getElementById('totalUnits').textContent=bn(data.products.reduce((s,p)=>s+p.qty,0));
- document.getElementById('lowStockCount').textContent=bn(data.products.filter(p=>p.qty>0&&p.qty<=5).length);
- document.getElementById('outStockCount').textContent=bn(data.products.filter(p=>p.qty===0).length);
- document.getElementById('productList').innerHTML=arr.length?arr.map(p=>`
- <div class="item" onclick="openProduct('${p.id}')">
-  <div class="avatar" style="background:#f1eaff;color:#7c3aed">📦</div>
-  <div class="info"><b>${safe(p.name)}</b><small>ক্রয়মূল্য: ${money(p.price)} • স্টক: ${bn(p.qty)}</small></div>
-  <span class="badge ${p.qty>5?'ok':''}">${p.qty===0?'শেষ':p.qty<=5?'কম':'আছে'}</span><span class="arrow">›</span>
- </div>`).join(''):'<div class="empty"><b>কোনো পণ্য পাওয়া যায়নি</b>নতুন মাল যোগ করুন।</div>';
+
+ document.getElementById('totalUnits').textContent=bn(totalUnits);
+
+ document.getElementById('totalStockValue').textContent=money(totalValue);
+
+ document.getElementById('lowStockCount').textContent=bn(
+  data.products.filter(p=>p.qty>0&&p.qty<=5).length
+ );
+
+ document.getElementById('outStockCount').textContent=bn(
+  data.products.filter(p=>p.qty===0).length
+ );
+
+ document.getElementById('productList').innerHTML=
+
+  arr.length?arr.map(p=>`
+
+  <div class="item" onclick="openProduct('${p.id}')">
+
+   <div class="avatar" style="background:#f1eaff;color:#7c3aed">
+    📦
+   </div>
+
+   <div class="info">
+    <b>${safe(p.name)}</b>
+    <small>
+     ক্রয়মূল্য: ${money(p.price)}
+     • স্টক: ${bn(p.qty)}
+    </small>
+   </div>
+
+   <span class="badge ${p.qty>5?'ok':''}">
+    ${p.qty===0?'শেষ':p.qty<=5?'কম':'আছে'}
+   </span>
+
+   <span class="arrow">›</span>
+
+  </div>
+
+  `).join(''):
+
+  '<div class="empty"><b>কোনো পণ্য পাওয়া যায়নি</b>নতুন মাল যোগ করুন।</div>';
 }
+
+
 function resetProductFilters(){
+
  document.getElementById('productSearch').value='';
- document.getElementById('productSort').value='high';renderProducts();
+ document.getElementById('productSort').value='high';
+
+ renderProducts();
 }
+
+
+/* PRODUCT FORM */
+
 function openProductForm(){
+
  editingProduct=null;
+
  document.getElementById('productFormTitle').textContent='নতুন পণ্য যোগ';
- ['productName','productPrice','productQty','productNote'].forEach(id=>document.getElementById(id).value='');
+
+ ['productName','productPrice','productQty','productNote'].forEach(id=>
+  document.getElementById(id).value=''
+ );
+
  showPage('productFormPage');
 }
-function backFromProductForm(){showPage(editingProduct?'productDetail':'stockHome')}
-function saveProduct(){
- const name=document.getElementById('productName').value.trim();
- const price=Number(document.getElementById('productPrice').value||0);
- const qty=Number(document.getElementById('productQty').value||0);
- const note=document.getElementById('productNote').value.trim();
- if(!name)return alert('পণ্যের নাম লিখুন।');
- if(price<0||qty<0||!Number.isFinite(price)||!Number.isFinite(qty))return alert('সঠিক পরিমাণ লিখুন।');
- if(editingProduct){
-  const p=data.products.find(x=>x.id===editingProduct);if(!p)return;
-  p.name=name;p.price=price;p.qty=qty;p.note=note;currentProduct=p.id;
- }else{
-  const p={id:uid(),name,price,qty,note};data.products.push(p);currentProduct=p.id;
- }
- save();showPage('productDetail');
+
+function backFromProductForm(){
+ showPage(editingProduct?'productDetail':'stockHome');
 }
-function openProduct(id){currentProduct=id;showPage('productDetail')}
+
+
+/* SAVE PRODUCT */
+
+function saveProduct(){
+
+ const name=document.getElementById('productName').value.trim();
+
+ const price=Number(document.getElementById('productPrice').value||0);
+
+ const qty=Number(document.getElementById('productQty').value||0);
+
+ const note=document.getElementById('productNote').value.trim();
+
+ if(!name)return alert('পণ্যের নাম লিখুন।');
+
+ if(price<0||qty<0||!Number.isFinite(price)||!Number.isFinite(qty))
+  return alert('সঠিক পরিমাণ লিখুন।');
+
+ if(editingProduct){
+
+  const p=data.products.find(x=>x.id===editingProduct);
+  if(!p)return;
+
+  p.name=name;
+  p.price=price;
+  p.qty=qty;
+  p.note=note;
+
+  currentProduct=p.id;
+
+ }else{
+
+  const p={
+   id:uid(),
+   name,
+   price,
+   qty,
+   note
+  };
+
+  data.products.push(p);
+  currentProduct=p.id;
+ }
+
+ save();
+
+ showPage('productDetail');
+}
+
+
+/* PRODUCT DETAIL */
+
+function openProduct(id){
+ currentProduct=id;
+ showPage('productDetail');
+}
+
 function renderProductDetail(){
- const p=data.products.find(x=>x.id===currentProduct);if(!p)return;
+
+ const p=data.products.find(x=>x.id===currentProduct);
+ if(!p)return;
+
  document.getElementById('productDetailName').textContent=p.name;
+
  document.getElementById('productDetailQty').textContent=bn(p.qty);
+
  document.getElementById('productDetailPrice').textContent=money(p.price);
+
  document.getElementById('productDetailNote').textContent=p.note||'';
 }
+
+
+/* EDIT PRODUCT */
+
 function editCurrentProduct(){
- const p=data.products.find(x=>x.id===currentProduct);if(!p)return;
+
+ const p=data.products.find(x=>x.id===currentProduct);
+ if(!p)return;
+
  editingProduct=p.id;
+
  document.getElementById('productFormTitle').textContent='পণ্যের তথ্য পরিবর্তন';
+
  document.getElementById('productName').value=p.name;
  document.getElementById('productPrice').value=p.price;
  document.getElementById('productQty').value=p.qty;
  document.getElementById('productNote').value=p.note||'';
+
  showPage('productFormPage');
 }
+
+
+/* UPDATE STOCK */
+
 async function updateStock(){
- const p=data.products.find(x=>x.id===currentProduct);if(!p)return;
+
+ const p=data.products.find(x=>x.id===currentProduct);
+ if(!p)return;
+
  const add=Number(document.getElementById('stockAdd').value||0);
+
  const remove=Number(document.getElementById('stockRemove').value||0);
- if((add>0&&remove>0)||(!add&&!remove))return alert('মাল যোগ অথবা মাল বের—একটি ঘর পূরণ করুন।');
- if(add<0||remove<0||!Number.isFinite(add)||!Number.isFinite(remove)||remove>p.qty)return alert('স্টকের পরিমাণ সঠিক নয়।');
+
+ if((add>0&&remove>0)||(!add&&!remove))
+  return alert('মাল যোগ অথবা মাল বের—একটি ঘর পূরণ করুন।');
+
+ if(
+  add<0||
+  remove<0||
+  !Number.isFinite(add)||
+  !Number.isFinite(remove)||
+  remove>p.qty
+ ){
+  return alert('স্টকের পরিমাণ সঠিক নয়।');
+ }
+
  if(remove>0){
-  const ok=await confirmAction('স্টক কমাবেন?','আপনি '+bn(remove)+' ইউনিট '+p.name+' স্টক থেকে বাদ দিতে যাচ্ছেন। নিশ্চিত?');
+
+  const ok=await confirmAction(
+   'স্টক কমাবেন?',
+   'আপনি '+bn(remove)+' ইউনিট '+p.name+' স্টক থেকে বাদ দিতে যাচ্ছেন। নিশ্চিত?'
+  );
+
   if(!ok)return;
  }
+
  p.qty+=add-remove;
+
  document.getElementById('stockAdd').value='';
  document.getElementById('stockRemove').value='';
- save();renderProductDetail();renderProducts();
-}
-async function deleteProduct(){
- const p=data.products.find(x=>x.id===currentProduct);if(!p)return;
- const ok=await confirmAction('পণ্য ডিলিট করবেন?','সতর্কতা: '+p.name+'-এর স্টক তথ্য মুছে যাবে। এই কাজ ফিরিয়ে আনা যাবে না।');
- if(!ok)return;
- data.products=data.products.filter(x=>x.id!==currentProduct);
- currentProduct=null;save();showPage('stockHome');
-}
-
-/* BACKUP / RESTORE */
-function downloadBackup(){
- const payload={app:'DokanHisab',version:1,createdAt:now(),data};
- const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');a.href=url;
- a.download='dokan-hisab-backup-'+new Date().toISOString().slice(0,10)+'.json';
- a.click();URL.revokeObjectURL(url);
-}
-async function restoreBackup(){
- const file=document.getElementById('restoreFile').files[0];
- if(!file)return alert('আগে ব্যাকআপ ফাইল নির্বাচন করুন।');
- const ok=await confirmAction('ব্যাকআপ রিস্টোর করবেন?','বর্তমান কাস্টমার ও স্টকের তথ্য ব্যাকআপ ফাইলের তথ্য দিয়ে প্রতিস্থাপিত হবে। আগে বর্তমান হিসাব ব্যাকআপ করেছেন তো?');
- if(!ok)return;
- try{
-  const parsed=JSON.parse(await file.text());
-  const incoming=parsed.data||parsed;
-  if(!Array.isArray(incoming.customers)||!Array.isArray(incoming.products))throw new Error('invalid');
-  data={
-   customers:incoming.customers.map(c=>({
-    id:c.id||uid(),name:String(c.name||'নাম নেই'),phone:String(c.phone||''),
-    opening:Number(c.opening||0),
-    transactions:Array.isArray(c.transactions)?c.transactions.map(t=>({
-     id:t.id||uid(),type:t.type==='due'?'due':'paid',
-     amount:Number(t.amount||0),note:String(t.note||''),date:t.date||now()
-    })):[]
-   })),
-   products:incoming.products.map(p=>({
-    id:p.id||uid(),name:String(p.name||'নাম নেই'),
-    price:Number(p.price||0),qty:Number(p.qty||0),note:String(p.note||'')
-   }))
-  };
-  save();currentCustomer=null;currentProduct=null;
-  alert('ব্যাকআপ সফলভাবে রিস্টোর হয়েছে।');
-  showPage('customerHome');
- }catch(e){alert('এই ফাইলটি সঠিক দোকান হিসাবের ব্যাকআপ নয়।')}
-}
-
-/* START */
-document.getElementById('today').textContent=new Date().toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'});
-load();renderAll();
-</script>
-
-<script>
-/* ===== দৈনিক হিসাব: WhatsApp + কাস্টমার মেসেজ + স্টক ===== */
-
-/* পুরোনো হিসাব অক্ষত রেখে স্টক সংরক্ষণ */
-if(!Array.isArray(data.stock)) data.stock=[];
-
-/* নতুন ডিজাইন */
-const extraStyle=document.createElement('style');
-extraStyle.textContent=`
-.tabs{grid-template-columns:repeat(4,1fr)}
-.stock-item{padding:12px 0;border-bottom:1px solid #eee}
-.stock-item strong{display:block}
-.stock-value{font-size:20px;font-weight:bold;color:#16804c}
-`;
-document.head.appendChild(extraStyle);
-
-/* নতুন Stock Tab */
-const tabs=document.querySelector('.tabs');
-const stockTab=document.createElement('button');
-stockTab.textContent='মাল স্টক';
-stockTab.onclick=function(){showTab('stock',this)};
-tabs.appendChild(stockTab);
-
-/* স্টক পেজ তৈরি */
-const stockPage=document.createElement('section');
-stockPage.id='stock';
-stockPage.className='hidden';
-stockPage.innerHTML=`
-<div class="card">
-<h3>📦 স্টকের সারসংক্ষেপ</h3>
-<div class="stats">
- <div class="stat"><small>মোট স্টক মূল্য</small><strong class="stock-value" id="stockTotalValue">৳০</strong></div>
- <div class="stat"><small>পণ্যের সংখ্যা</small><strong id="stockProductCount">০</strong></div>
- <div class="stat"><small>মোট ইউনিট</small><strong id="stockTotalQty">০</strong></div>
-</div>
-</div>
-<div class="card">
-<h3>নতুন মাল স্টক করুন</h3>
-<label>পণ্যের নাম</label>
-<input id="stockName" placeholder="যেমন: চার্জার, হেডফোন">
-<label>লেনদেনের ধরন</label>
-<select id="stockAction">
-<option value="add">নতুন মাল যোগ করুন</option>
-<option value="remove">স্টক থেকে মাল কমান</option>
-</select>
-<label>পরিমাণ (পিস)</label>
-<input id="stockQty" type="number" min="1" placeholder="কত পিস">
-<label>প্রতি পিস ক্রয়মূল্য (৳)</label>
-<input id="stockCost" type="number" min="0" placeholder="প্রতি পিসের ক্রয়মূল্য">
-<button onclick="updateStock()">স্টক সংরক্ষণ করুন</button>
-<div class="muted">মাল কমানোর সময় প্রতি পিসের ক্রয়মূল্য প্রয়োজন নেই।</div>
-</div>
-<div class="card">
-<h3>বর্তমান মালের তালিকা</h3>
-<input id="stockSearch" placeholder="পণ্যের নাম খুঁজুন..." oninput="renderStock()">
-<div id="stockList"></div>
-</div>
-`;
-const backupCard=document.querySelector('main').lastElementChild;
-document.querySelector('main').insertBefore(stockPage,backupCard);
-
-/* কাস্টমার তালিকায় WhatsApp বাটন */
-const waCard=document.createElement('div');
-waCard.className='card';
-waCard.innerHTML=`
-<h3>📲 সম্পূর্ণ কাস্টমার লিস্ট</h3>
-<div class="muted">সকল কাস্টমারের নাম, বাকি ও জমার হিসাব WhatsApp-এ পাঠান।</div>
-<button onclick="sendFullCustomerList()">WhatsApp-এ পুরো লিস্ট পাঠান</button>
-`;
-$('customerListPage').appendChild(waCard);
-
-/* কাস্টমার বিস্তারিত পেজে মেসেজ কপি */
-const msgCard=document.createElement('div');
-msgCard.className='card';
-msgCard.innerHTML=`
-<h3>কাস্টমারকে হিসাবের মেসেজ</h3>
-<div class="muted">এই কাস্টমারের বর্তমান বাকি ও জমার হিসাব দিয়ে মেসেজ তৈরি হবে।</div>
-<button class="secondary" onclick="copyCustomerMessage()">মেসেজ কপি করুন</button>
-`;
-$('customerDetailPage').appendChild(msgCard);
-
-/* Tab পরিবর্তন */
-showTab=function(id,btn){
- ['home','daily','customers','stock'].forEach(x=>$(x).classList.add('hidden'));
- $(id).classList.remove('hidden');
- document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));
- btn.classList.add('active');
- render();
- renderStock();
-};
-
-/* WhatsApp-এ সম্পূর্ণ কাস্টমার লিস্ট */
-function sendFullCustomerList(){
- if(!data.customers.length)return alert('কোনো কাস্টমার নেই');
-
- let lines=data.customers.map((c,i)=>{
-  let b=getBalances(c.id);
-  return `${i+1}. ${c.name}\nবাকি/পাওনা: ${money(b.due)}\nজমা: ${money(b.deposit)}`;
- });
-
- let totalDue=data.customers.reduce((sum,c)=>sum+getBalances(c.id).due,0);
- let totalDeposit=data.customers.reduce((sum,c)=>sum+getBalances(c.id).deposit,0);
-
- let message=
- `📒 দোকানের কাস্টমার হিসাব\n`+
- `তারিখ: ${today()}\n\n`+
- lines.join('\n\n')+
- `\n\n--------------------\n`+
- `মোট কাস্টমার: ${data.customers.length}\n`+
- `মোট পাওনা: ${money(totalDue)}\n`+
- `মোট জমা: ${money(totalDeposit)}\n\n`+
- `বিঃদ্রঃ বাকি ও জমা আলাদা হিসাব।`;
-
- let url='https://wa.me/8801783036819?text='+encodeURIComponent(message);
- window.open(url,'_blank');
-}
-
-/* একজন কাস্টমারের মেসেজ কপি */
-function copyCustomerMessage(){
- let c=data.customers.find(x=>Number(x.id)===Number(selectedCustomer));
- if(!c)return alert('কাস্টমার নির্বাচন করা হয়নি');
-
- let b=getBalances(c.id);
- let message=
- `আসসালামু আলাইকুম ${c.name},\n\n`+
- `আপনার দোকানের হিসাব:\n`+
- `বর্তমান বাকি/পাওনা: ${money(b.due)}\n`+
- `আপনার জমা: ${money(b.deposit)}\n\n`+
- `বাকি ও জমা আলাদা হিসাব করা হয়েছে।\n`+
- `ধন্যবাদ।`;
-
- copyText(message);
-}
-
-/* কপি করার ব্যবস্থা */
-function copyText(text){
- if(navigator.clipboard && window.isSecureContext){
-  navigator.clipboard.writeText(text)
-   .then(()=>alert('মেসেজ কপি হয়েছে। এখন WhatsApp-এ পাঠাতে পারবেন।'))
-   .catch(()=>fallbackCopy(text));
- }else{
-  fallbackCopy(text);
- }
-}
-function fallbackCopy(text){
- let area=document.createElement('textarea');
- area.value=text;
- document.body.appendChild(area);
- area.select();
- try{
-  document.execCommand('copy');
-  alert('মেসেজ কপি হয়েছে।');
- }catch(e){
-  alert('কপি করা যায়নি।');
- }
- area.remove();
-}
-
-/* স্টক যোগ / কমানো */
-function updateStock(){
- let name=$('stockName').value.trim();
- let qty=Number($('stockQty').value);
- let cost=Number($('stockCost').value);
- let action=$('stockAction').value;
-
- if(!name)return alert('পণ্যের নাম লিখুন');
- if(!Number.isInteger(qty)||qty<=0)return alert('সঠিক পরিমাণ লিখুন');
-
- let item=data.stock.find(x=>x.name.trim().toLowerCase()===name.toLowerCase());
-
- if(action==='add'){
-  if(!Number.isFinite(cost)||cost<0)return alert('সঠিক ক্রয়মূল্য লিখুন');
-
-  if(item){
-   let oldQty=Number(item.qty);
-   let oldCost=Number(item.cost);
-   let newQty=oldQty+qty;
-   item.cost=newQty>0?((oldQty*oldCost)+(qty*cost))/newQty:cost;
-   item.qty=newQty;
-  }else{
-   data.stock.push({
-    id:Date.now(),
-    name,
-    qty,
-    cost
-   });
-  }
- }else{
-  if(!item)return alert('এই পণ্য স্টকে নেই');
-  if(qty>Number(item.qty))return alert('স্টকে থাকা পরিমাণের চেয়ে বেশি কমানো যাবে না');
-  item.qty-=qty;
- }
-
- $('stockName').value='';
- $('stockQty').value='';
- $('stockCost').value='';
 
  save();
- renderStock();
- alert('স্টকের হিসাব আপডেট হয়েছে');
+
+ renderProductDetail();
+ renderProducts();
 }
 
-/* স্টক তালিকা ও মোট মূল্য */
-function renderStock(){
- if(!$('stockList'))return;
 
- let totalValue=0,totalQty=0;
- data.stock.forEach(x=>{
-  totalValue+=Number(x.qty)*Number(x.cost);
-  totalQty+=Number(x.qty);
+/* DELETE PRODUCT */
+
+async function deleteProduct(){
+
+ const p=data.products.find(x=>x.id===currentProduct);
+ if(!p)return;
+
+ const ok=await confirmAction(
+  'পণ্য ডিলিট করবেন?',
+  'সতর্কতা: '+p.name+'-এর স্টক তথ্য মুছে যাবে। এই কাজ ফিরিয়ে আনা যাবে না।'
+ );
+
+ if(!ok)return;
+
+ data.products=data.products.filter(x=>x.id!==currentProduct);
+
+ currentProduct=null;
+
+ save();
+
+ showPage('stockHome');
+}
+
+
+/* BACKUP */
+
+function downloadBackup(){
+
+ const payload={
+  app:'DokanHisab',
+  version:1,
+  createdAt:now(),
+  data
+ };
+
+ const blob=new Blob(
+  [JSON.stringify(payload,null,2)],
+  {type:'application/json'}
+ );
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement('a');
+
+ a.href=url;
+
+ a.download='dokan-hisab-backup-'+
+  new Date().toISOString().slice(0,10)+'.json';
+
+ a.click();
+
+ URL.revokeObjectURL(url);
+}
+
+
+/* RESTORE */
+
+async function restoreBackup(){
+
+ const file=document.getElementById('restoreFile').files[0];
+
+ if(!file)return alert('আগে ব্যাকআপ ফাইল নির্বাচন করুন।');
+
+ const ok=await confirmAction(
+  'ব্যাকআপ রিস্টোর করবেন?',
+  'বর্তমান কাস্টমার ও স্টকের তথ্য ব্যাকআপ ফাইলের তথ্য দিয়ে প্রতিস্থাপিত হবে। আগে বর্তমান হিসাব ব্যাকআপ করেছেন তো?'
+ );
+
+ if(!ok)return;
+
+ try{
+
+  const parsed=JSON.parse(await file.text());
+
+  const incoming=parsed.data||parsed;
+
+  if(
+   !Array.isArray(incoming.customers)||
+   !Array.isArray(incoming.products)
+  ){
+   throw new Error('invalid');
+  }
+
+  data={
+
+   customers:incoming.customers.map(c=>({
+
+    id:c.id||uid(),
+    name:String(c.name||'নাম নেই'),
+    phone:String(c.phone||''),
+    opening:Number(c.opening||0),
+
+    transactions:Array.isArray(c.transactions)?
+     c.transactions.map(t=>({
+
+      id:t.id||uid(),
+      type:t.type==='due'?'due':'paid',
+      amount:Number(t.amount||0),
+      note:String(t.note||''),
+      date:t.date||now()
+
+     })):[]
+   })),
+
+   products:incoming.products.map(p=>({
+
+    id:p.id||uid(),
+    name:String(p.name||'নাম নেই'),
+    price:Number(p.price||0),
+    qty:Number(p.qty||0),
+    note:String(p.note||'')
+
+   }))
+
+  };
+
+  save();
+
+  currentCustomer=null;
+  currentProduct=null;
+
+  alert('ব্যাকআপ সফলভাবে রিস্টোর হয়েছে।');
+
+  showPage('customerHome');
+
+ }catch(e){
+
+  alert('এই ফাইলটি সঠিক দোকান হিসাবের ব্যাকআপ নয়।');
+
+ }
+}
+
+
+/* START */
+
+document.getElementById('today').textContent=
+ new Date().toLocaleDateString('bn-BD',{
+  day:'numeric',
+  month:'long',
+  year:'numeric'
  });
 
- $('stockTotalValue').textContent=money(totalValue);
- $('stockProductCount').textContent=data.stock.length;
- $('stockTotalQty').textContent=totalQty.toLocaleString('en-IN');
-
- let search=($('stockSearch').value||'').trim().toLowerCase();
- let items=data.stock.filter(x=>x.name.toLowerCase().includes(search));
-
- $('stockList').innerHTML=items.map(x=>{
-  let value=Number(x.qty)*Number(x.cost);
-  return `
-  <div class="stock-item">
-   <strong>${safe(x.name)}</strong>
-   <div class="muted">স্টকে আছে: ${Number(x.qty).toLocaleString('en-IN')} পিস</div>
-   <div class="muted">প্রতি পিস ক্রয়মূল্য: ${money(x.cost)}</div>
-   <div class="green"><b>মোট মূল্য: ${money(value)}</b></div>
-  </div>`;
- }).join('')||'<div class="muted">কোনো পণ্য পাওয়া যায়নি</div>';
-}
-
-/* পুরোনো save ফাংশনের সঙ্গে স্টক সংরক্ষণ */
-const oldSaveForStock=save;
-save=function(){
- if(!Array.isArray(data.stock))data.stock=[];
- oldSaveForStock();
- renderStock();
-};
-
-/* পুরোনো Backup/Restore-এ stock-ও থাকবে */
-const oldBackupForStock=backup;
-backup=function(){
- if(!Array.isArray(data.stock))data.stock=[];
- oldBackupForStock();
-};
-
-/* পুরোনো Restore থেকে আসা ডেটাতেও stock নিশ্চিত */
-const oldRestoreForStock=restore;
-restore=function(e){
- oldRestoreForStock(e);
-};
-
-/* শুরুতে স্টক দেখানো */
-renderStock();
+load();
+renderAll();
 
 </script>
 
