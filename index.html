@@ -648,5 +648,263 @@ async function restoreBackup(){
 document.getElementById('today').textContent=new Date().toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'});
 load();renderAll();
 </script>
+
+<script>
+/* ===== দৈনিক হিসাব: WhatsApp + কাস্টমার মেসেজ + স্টক ===== */
+
+/* পুরোনো হিসাব অক্ষত রেখে স্টক সংরক্ষণ */
+if(!Array.isArray(data.stock)) data.stock=[];
+
+/* নতুন ডিজাইন */
+const extraStyle=document.createElement('style');
+extraStyle.textContent=`
+.tabs{grid-template-columns:repeat(4,1fr)}
+.stock-item{padding:12px 0;border-bottom:1px solid #eee}
+.stock-item strong{display:block}
+.stock-value{font-size:20px;font-weight:bold;color:#16804c}
+`;
+document.head.appendChild(extraStyle);
+
+/* নতুন Stock Tab */
+const tabs=document.querySelector('.tabs');
+const stockTab=document.createElement('button');
+stockTab.textContent='মাল স্টক';
+stockTab.onclick=function(){showTab('stock',this)};
+tabs.appendChild(stockTab);
+
+/* স্টক পেজ তৈরি */
+const stockPage=document.createElement('section');
+stockPage.id='stock';
+stockPage.className='hidden';
+stockPage.innerHTML=`
+<div class="card">
+<h3>📦 স্টকের সারসংক্ষেপ</h3>
+<div class="stats">
+ <div class="stat"><small>মোট স্টক মূল্য</small><strong class="stock-value" id="stockTotalValue">৳০</strong></div>
+ <div class="stat"><small>পণ্যের সংখ্যা</small><strong id="stockProductCount">০</strong></div>
+ <div class="stat"><small>মোট ইউনিট</small><strong id="stockTotalQty">০</strong></div>
+</div>
+</div>
+<div class="card">
+<h3>নতুন মাল স্টক করুন</h3>
+<label>পণ্যের নাম</label>
+<input id="stockName" placeholder="যেমন: চার্জার, হেডফোন">
+<label>লেনদেনের ধরন</label>
+<select id="stockAction">
+<option value="add">নতুন মাল যোগ করুন</option>
+<option value="remove">স্টক থেকে মাল কমান</option>
+</select>
+<label>পরিমাণ (পিস)</label>
+<input id="stockQty" type="number" min="1" placeholder="কত পিস">
+<label>প্রতি পিস ক্রয়মূল্য (৳)</label>
+<input id="stockCost" type="number" min="0" placeholder="প্রতি পিসের ক্রয়মূল্য">
+<button onclick="updateStock()">স্টক সংরক্ষণ করুন</button>
+<div class="muted">মাল কমানোর সময় প্রতি পিসের ক্রয়মূল্য প্রয়োজন নেই।</div>
+</div>
+<div class="card">
+<h3>বর্তমান মালের তালিকা</h3>
+<input id="stockSearch" placeholder="পণ্যের নাম খুঁজুন..." oninput="renderStock()">
+<div id="stockList"></div>
+</div>
+`;
+const backupCard=document.querySelector('main').lastElementChild;
+document.querySelector('main').insertBefore(stockPage,backupCard);
+
+/* কাস্টমার তালিকায় WhatsApp বাটন */
+const waCard=document.createElement('div');
+waCard.className='card';
+waCard.innerHTML=`
+<h3>📲 সম্পূর্ণ কাস্টমার লিস্ট</h3>
+<div class="muted">সকল কাস্টমারের নাম, বাকি ও জমার হিসাব WhatsApp-এ পাঠান।</div>
+<button onclick="sendFullCustomerList()">WhatsApp-এ পুরো লিস্ট পাঠান</button>
+`;
+$('customerListPage').appendChild(waCard);
+
+/* কাস্টমার বিস্তারিত পেজে মেসেজ কপি */
+const msgCard=document.createElement('div');
+msgCard.className='card';
+msgCard.innerHTML=`
+<h3>কাস্টমারকে হিসাবের মেসেজ</h3>
+<div class="muted">এই কাস্টমারের বর্তমান বাকি ও জমার হিসাব দিয়ে মেসেজ তৈরি হবে।</div>
+<button class="secondary" onclick="copyCustomerMessage()">মেসেজ কপি করুন</button>
+`;
+$('customerDetailPage').appendChild(msgCard);
+
+/* Tab পরিবর্তন */
+showTab=function(id,btn){
+ ['home','daily','customers','stock'].forEach(x=>$(x).classList.add('hidden'));
+ $(id).classList.remove('hidden');
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+ render();
+ renderStock();
+};
+
+/* WhatsApp-এ সম্পূর্ণ কাস্টমার লিস্ট */
+function sendFullCustomerList(){
+ if(!data.customers.length)return alert('কোনো কাস্টমার নেই');
+
+ let lines=data.customers.map((c,i)=>{
+  let b=getBalances(c.id);
+  return `${i+1}. ${c.name}\nবাকি/পাওনা: ${money(b.due)}\nজমা: ${money(b.deposit)}`;
+ });
+
+ let totalDue=data.customers.reduce((sum,c)=>sum+getBalances(c.id).due,0);
+ let totalDeposit=data.customers.reduce((sum,c)=>sum+getBalances(c.id).deposit,0);
+
+ let message=
+ `📒 দোকানের কাস্টমার হিসাব\n`+
+ `তারিখ: ${today()}\n\n`+
+ lines.join('\n\n')+
+ `\n\n--------------------\n`+
+ `মোট কাস্টমার: ${data.customers.length}\n`+
+ `মোট পাওনা: ${money(totalDue)}\n`+
+ `মোট জমা: ${money(totalDeposit)}\n\n`+
+ `বিঃদ্রঃ বাকি ও জমা আলাদা হিসাব।`;
+
+ let url='https://wa.me/8801783036819?text='+encodeURIComponent(message);
+ window.open(url,'_blank');
+}
+
+/* একজন কাস্টমারের মেসেজ কপি */
+function copyCustomerMessage(){
+ let c=data.customers.find(x=>Number(x.id)===Number(selectedCustomer));
+ if(!c)return alert('কাস্টমার নির্বাচন করা হয়নি');
+
+ let b=getBalances(c.id);
+ let message=
+ `আসসালামু আলাইকুম ${c.name},\n\n`+
+ `আপনার দোকানের হিসাব:\n`+
+ `বর্তমান বাকি/পাওনা: ${money(b.due)}\n`+
+ `আপনার জমা: ${money(b.deposit)}\n\n`+
+ `বাকি ও জমা আলাদা হিসাব করা হয়েছে।\n`+
+ `ধন্যবাদ।`;
+
+ copyText(message);
+}
+
+/* কপি করার ব্যবস্থা */
+function copyText(text){
+ if(navigator.clipboard && window.isSecureContext){
+  navigator.clipboard.writeText(text)
+   .then(()=>alert('মেসেজ কপি হয়েছে। এখন WhatsApp-এ পাঠাতে পারবেন।'))
+   .catch(()=>fallbackCopy(text));
+ }else{
+  fallbackCopy(text);
+ }
+}
+function fallbackCopy(text){
+ let area=document.createElement('textarea');
+ area.value=text;
+ document.body.appendChild(area);
+ area.select();
+ try{
+  document.execCommand('copy');
+  alert('মেসেজ কপি হয়েছে।');
+ }catch(e){
+  alert('কপি করা যায়নি।');
+ }
+ area.remove();
+}
+
+/* স্টক যোগ / কমানো */
+function updateStock(){
+ let name=$('stockName').value.trim();
+ let qty=Number($('stockQty').value);
+ let cost=Number($('stockCost').value);
+ let action=$('stockAction').value;
+
+ if(!name)return alert('পণ্যের নাম লিখুন');
+ if(!Number.isInteger(qty)||qty<=0)return alert('সঠিক পরিমাণ লিখুন');
+
+ let item=data.stock.find(x=>x.name.trim().toLowerCase()===name.toLowerCase());
+
+ if(action==='add'){
+  if(!Number.isFinite(cost)||cost<0)return alert('সঠিক ক্রয়মূল্য লিখুন');
+
+  if(item){
+   let oldQty=Number(item.qty);
+   let oldCost=Number(item.cost);
+   let newQty=oldQty+qty;
+   item.cost=newQty>0?((oldQty*oldCost)+(qty*cost))/newQty:cost;
+   item.qty=newQty;
+  }else{
+   data.stock.push({
+    id:Date.now(),
+    name,
+    qty,
+    cost
+   });
+  }
+ }else{
+  if(!item)return alert('এই পণ্য স্টকে নেই');
+  if(qty>Number(item.qty))return alert('স্টকে থাকা পরিমাণের চেয়ে বেশি কমানো যাবে না');
+  item.qty-=qty;
+ }
+
+ $('stockName').value='';
+ $('stockQty').value='';
+ $('stockCost').value='';
+
+ save();
+ renderStock();
+ alert('স্টকের হিসাব আপডেট হয়েছে');
+}
+
+/* স্টক তালিকা ও মোট মূল্য */
+function renderStock(){
+ if(!$('stockList'))return;
+
+ let totalValue=0,totalQty=0;
+ data.stock.forEach(x=>{
+  totalValue+=Number(x.qty)*Number(x.cost);
+  totalQty+=Number(x.qty);
+ });
+
+ $('stockTotalValue').textContent=money(totalValue);
+ $('stockProductCount').textContent=data.stock.length;
+ $('stockTotalQty').textContent=totalQty.toLocaleString('en-IN');
+
+ let search=($('stockSearch').value||'').trim().toLowerCase();
+ let items=data.stock.filter(x=>x.name.toLowerCase().includes(search));
+
+ $('stockList').innerHTML=items.map(x=>{
+  let value=Number(x.qty)*Number(x.cost);
+  return `
+  <div class="stock-item">
+   <strong>${safe(x.name)}</strong>
+   <div class="muted">স্টকে আছে: ${Number(x.qty).toLocaleString('en-IN')} পিস</div>
+   <div class="muted">প্রতি পিস ক্রয়মূল্য: ${money(x.cost)}</div>
+   <div class="green"><b>মোট মূল্য: ${money(value)}</b></div>
+  </div>`;
+ }).join('')||'<div class="muted">কোনো পণ্য পাওয়া যায়নি</div>';
+}
+
+/* পুরোনো save ফাংশনের সঙ্গে স্টক সংরক্ষণ */
+const oldSaveForStock=save;
+save=function(){
+ if(!Array.isArray(data.stock))data.stock=[];
+ oldSaveForStock();
+ renderStock();
+};
+
+/* পুরোনো Backup/Restore-এ stock-ও থাকবে */
+const oldBackupForStock=backup;
+backup=function(){
+ if(!Array.isArray(data.stock))data.stock=[];
+ oldBackupForStock();
+};
+
+/* পুরোনো Restore থেকে আসা ডেটাতেও stock নিশ্চিত */
+const oldRestoreForStock=restore;
+restore=function(e){
+ oldRestoreForStock(e);
+};
+
+/* শুরুতে স্টক দেখানো */
+renderStock();
+
+</script>
+
 </body>
 </html>
